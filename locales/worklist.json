@@ -1,0 +1,1999 @@
+{
+  "app.sem_ia_sem_root_100_offline": {
+    "pt": " Sem IA · Sem root · 100% offline",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:50"
+    ]
+  },
+  "app.readroid_v": {
+    "pt": " ReaDroid v",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:49"
+    ]
+  },
+  "app.enter_para_voltar_ao_menu": {
+    "pt": "\nENTER para voltar ao menu...",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:68"
+    ]
+  },
+  "app.pkg_install_apktool_aapt_apksigner_openj": {
+    "pt": " pkg install apktool aapt apksigner openjdk-21",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:201"
+    ]
+  },
+  "app.aapt_j_inclui_o_zipalign_apksigner_d_ass": {
+    "pt": " (aapt já inclui o zipalign; apksigner dá assinatura v1+v2+v3;",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:202"
+    ]
+  },
+  "app.sem_ele_cai_para_jarsigner_que_s_assina": {
+    "pt": "  sem ele, cai para jarsigner, que só assina v1.)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:203"
+    ]
+  },
+  "app.pasta": {
+    "pt": "Pasta:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:208"
+    ]
+  },
+  "app.conte_do": {
+    "pt": "Conteúdo:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:209"
+    ]
+  },
+  "app.quando_terminar_de_editar_use_a_op_o_11": {
+    "pt": "Quando terminar de editar, use a opção 11 para reconstruir, alinhar e assinar.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:383"
+    ]
+  },
+  "app.inspecionar_estrutura_do_apk": {
+    "pt": "Inspecionar estrutura do APK",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:474"
+    ]
+  },
+  "app.analisar_manifesto_e_permiss_es": {
+    "pt": "Analisar manifesto e permissões",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:475"
+    ]
+  },
+  "app.buscar_urls_dom_nios_e_ips": {
+    "pt": "Buscar URLs, domínios e IPs",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:476"
+    ]
+  },
+  "app.decompilar_para_java_com_jadx": {
+    "pt": "Decompilar para Java com JADX",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:477"
+    ]
+  },
+  "app.extrair_smali_e_recursos_com_apktool": {
+    "pt": "Extrair smali e recursos com Apktool",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:478"
+    ]
+  },
+  "app.verificar_depend_ncias": {
+    "pt": "Verificar dependências",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:479"
+    ]
+  },
+  "app.abrir_pasta_de_relat_rios": {
+    "pt": "Abrir pasta de relatórios",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:480"
+    ]
+  },
+  "app.abrir_pasta_de_resultados": {
+    "pt": "Abrir pasta de resultados",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:481"
+    ]
+  },
+  "app.explorar_e_abrir_arquivos_gerados": {
+    "pt": "Explorar e abrir arquivos gerados",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:482"
+    ]
+  },
+  "app.edi_es_r_pidas_e_renomear_pacote_pr_buil": {
+    "pt": "Edições rápidas e renomear pacote (pré-build)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:483"
+    ]
+  },
+  "app.reconstruir_alinhar_e_assinar_apk": {
+    "pt": "Reconstruir, alinhar e assinar APK",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:484"
+    ]
+  },
+  "app.gerenciar_chave_de_assinatura": {
+    "pt": "Gerenciar chave de assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:485"
+    ]
+  },
+  "app.0_sair": {
+    "pt": " [0] Sair",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:492"
+    ]
+  },
+  "app.download": {
+    "pt": "Download",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:75"
+    ]
+  },
+  "app.documents": {
+    "pt": "Documents",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:76"
+    ]
+  },
+  "app.p_informar_outro_caminho": {
+    "pt": " [P] Informar outro caminho",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:100",
+      "readroid/app.py:132"
+    ]
+  },
+  "app.vazia_por_enquanto": {
+    "pt": " (vazia por enquanto)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:212"
+    ]
+  },
+  "app.voltar_uma_pasta_0_sair_do_explorador": {
+    "pt": " [..] Voltar uma pasta | [0] Sair do explorador",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:273"
+    ]
+  },
+  "app.1_c_digo_decompilado_e_recursos_output": {
+    "pt": " [1] Código decompilado e recursos (output)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:316"
+    ]
+  },
+  "app.2_relat_rios_json_reports": {
+    "pt": " [2] Relatórios JSON (reports)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:317"
+    ]
+  },
+  "app.3_apks_reconstru_dos_e_assinados_builds": {
+    "pt": " [3] APKs reconstruídos e assinados (builds)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:318"
+    ]
+  },
+  "app.0_voltar_ao_menu_principal": {
+    "pt": " [0] Voltar ao menu principal",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:319"
+    ]
+  },
+  "app.edi_es": {
+    "pt": "Edições",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:421"
+    ]
+  },
+  "app.reconstru_o_apktool_b": {
+    "pt": "Reconstrução (apktool b)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:421"
+    ]
+  },
+  "app.alinhamento_zipalign": {
+    "pt": "Alinhamento (zipalign)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:422"
+    ]
+  },
+  "app.chave_de_assinatura": {
+    "pt": "Chave de assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:422"
+    ]
+  },
+  "app.assinatura": {
+    "pt": "Assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:423"
+    ]
+  },
+  "app.verifica_o": {
+    "pt": "Verificação",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:423"
+    ]
+  },
+  "app.sha256": {
+    "pt": "SHA256:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:440"
+    ]
+  },
+  "app.a_senha_padr_o_readroid123_troque_editan": {
+    "pt": " (a senha padrão é 'readroid123' - troque editando builder.py se quiser outra)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:459"
+    ]
+  },
+  "app.nenhuma_chave_gerada_ainda_ela_criada_au": {
+    "pt": " Nenhuma chave gerada ainda. Ela é criada automaticamente na primeira",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:464"
+    ]
+  },
+  "app.reconstru_o_op_o_11_e_reaproveitada_nas": {
+    "pt": " reconstrução (opção 11) e reaproveitada nas seguintes.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:465"
+    ]
+  },
+  "app.term": {
+    "pt": "TERM",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:39"
+    ]
+  },
+  "app.o_arquivo_original_n_o_foi_modificado": {
+    "pt": "O arquivo original não foi modificado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:180"
+    ]
+  },
+  "app.verifica_o_de_depend_ncias": {
+    "pt": "\nVERIFICAÇÃO DE DEPENDÊNCIAS",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:184"
+    ]
+  },
+  "app.jadx": {
+    "pt": "JADX:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:197"
+    ]
+  },
+  "app.para_reconstruir_e_assinar_apks_op_o_11": {
+    "pt": "\nPara reconstruir e assinar APKs (opção 11):",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:200"
+    ]
+  },
+  "app.dir": {
+    "pt": " [DIR]",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:214"
+    ]
+  },
+  "app.file": {
+    "pt": " [FILE]",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:214"
+    ]
+  },
+  "app.caminho": {
+    "pt": "Caminho:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:229"
+    ]
+  },
+  "app.utf_8": {
+    "pt": "utf-8",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:231"
+    ]
+  },
+  "app.arquivo_vazio": {
+    "pt": "(arquivo vazio)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:248"
+    ]
+  },
+  "app.pasta_vazia": {
+    "pt": " (pasta vazia)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:265"
+    ]
+  },
+  "app.dir_2": {
+    "pt": "[DIR] ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:267"
+    ]
+  },
+  "app.arq": {
+    "pt": "[ARQ] ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:267"
+    ]
+  },
+  "app.o_pacote_atual_aparece_no_androidmanifes": {
+    "pt": "O pacote atual aparece no AndroidManifest.xml; isso move pastas smali",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:338"
+    ]
+  },
+  "app.e_troca_as_refer_ncias_de_classe_melhor": {
+    "pt": "e troca as referências de classe - é melhor esforço, teste o resultado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:339"
+    ]
+  },
+  "app.novo_pacote_ex_com_exemplo_app_ou_enter": {
+    "pt": "Novo pacote (ex: com.exemplo.app) ou ENTER para pular: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:340"
+    ]
+  },
+  "app.edi_es_r_pidas_dispon_veis": {
+    "pt": "\nEdições rápidas disponíveis:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:363"
+    ]
+  },
+  "app.n_meros_separados_por_v_rgula_ex_1_3_ou": {
+    "pt": "Números separados por vírgula (ex: 1,3), ou ENTER para pular: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:366"
+    ]
+  },
+  "app.reconstru_o_e_compila_o_automatizada": {
+    "pt": "\nReconstrução e compilação automatizada",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:387"
+    ]
+  },
+  "app.use_s_em_apks_seus_ou_que_voc_tem_autori": {
+    "pt": "Use só em APKs seus ou que você tem autorização para modificar.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:388"
+    ]
+  },
+  "app.reassinar_troca_a_identidade_do_desenvol": {
+    "pt": "Reassinar troca a identidade do desenvolvedor original; o resultado",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:389"
+    ]
+  },
+  "app.n_o_substitui_o_app_da_loja_nem_deve_ser": {
+    "pt": "não substitui o app da loja nem deve ser redistribuído sem permissão.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:390"
+    ]
+  },
+  "app.chave_de_assinatura_2": {
+    "pt": "\nChave de assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:455"
+    ]
+  },
+  "app.em_uso": {
+    "pt": " Em uso: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:457"
+    ]
+  },
+  "app.alias_padr_o": {
+    "pt": " Alias padrão: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:458"
+    ]
+  },
+  "app.local": {
+    "pt": " Local: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:466"
+    ]
+  },
+  "app.inspe_o_apk": {
+    "pt": "Inspeção APK",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:505"
+    ]
+  },
+  "app.apks_encontrados_nas_pastas_comuns": {
+    "pt": "APKs encontrados nas pastas comuns:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:93"
+    ]
+  },
+  "app.escolha_um_apk": {
+    "pt": "Escolha um APK: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:101"
+    ]
+  },
+  "app.nenhum_arquivo_informado": {
+    "pt": "Nenhum arquivo informado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:109"
+    ]
+  },
+  "app.arquivo_n_o_encontrado_dica_execute_term": {
+    "pt": "Arquivo não encontrado. Dica: execute termux-setup-storage e use ~/storage/shared/Download/app.apk",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:115"
+    ]
+  },
+  "app.pastas_decodificadas_com_apktool": {
+    "pt": "Pastas decodificadas com Apktool:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:129"
+    ]
+  },
+  "app.escolha_a_pasta": {
+    "pt": "Escolha a pasta: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:133"
+    ]
+  },
+  "app.pasta_n_o_encontrada": {
+    "pt": "Pasta não encontrada.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:144"
+    ]
+  },
+  "app.relat_rio_salvo": {
+    "pt": "\nRelatório salvo: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:153"
+    ]
+  },
+  "app.permiss_es_encontradas": {
+    "pt": "Permissões encontradas: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:167"
+    ]
+  },
+  "app.urls": {
+    "pt": "URLs: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:173"
+    ]
+  },
+  "app.dom_nios": {
+    "pt": " | Domínios: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:173"
+    ]
+  },
+  "app.ips_candidatos": {
+    "pt": " | IPs candidatos: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:173"
+    ]
+  },
+  "app.arquivos": {
+    "pt": "Arquivos: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:177"
+    ]
+  },
+  "app.dex": {
+    "pt": " | DEX: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:177"
+    ]
+  },
+  "app.bibliotecas_nativas": {
+    "pt": " | Bibliotecas nativas: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:177"
+    ]
+  },
+  "app.version": {
+    "pt": "-version",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:190"
+    ]
+  },
+  "app.java_encontrado_mas_n_o_foi_poss_vel_con": {
+    "pt": "Java encontrado, mas não foi possível consultar a versão.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:193"
+    ]
+  },
+  "app.version_2": {
+    "pt": "--version",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:196"
+    ]
+  },
+  "app.jadx_localizado_vers_o_n_o_confirmada": {
+    "pt": "JADX localizado; versão não confirmada.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:199"
+    ]
+  },
+  "app.enter_para_voltar_ao_explorador": {
+    "pt": "\nENTER para voltar ao explorador...",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:306"
+    ]
+  },
+  "app.arquivos_gerados": {
+    "pt": "\nARQUIVOS GERADOS",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:315"
+    ]
+  },
+  "app.explorar": {
+    "pt": "Explorar > ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:320"
+    ]
+  },
+  "app.nome_inv_lido_use_letras_n_meros_e_pelo": {
+    "pt": "Nome inválido. Use letras/números/'_' e pelo menos um ponto, ex: com.exemplo.app",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:344"
+    ]
+  },
+  "app.pasta_s_de_smali_movida_s": {
+    "pt": " pasta(s) de smali movida(s), ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:350"
+    ]
+  },
+  "app.arquivo_s_atualizado_s": {
+    "pt": " arquivo(s) atualizado(s).",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:351"
+    ]
+  },
+  "app.essa_pasta_n_o_parece_ser_uma_sa_da_do_a": {
+    "pt": "Essa pasta não parece ser uma saída do Apktool (opção 5). Confira o caminho.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:395"
+    ]
+  },
+  "app.n_meros_separados_por_v_rgula": {
+    "pt": "Números separados por vírgula: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:404"
+    ]
+  },
+  "app.a_reconstru_o_n_o_terminou_veja_os_passo": {
+    "pt": "\nA reconstrução não terminou. Veja os passos acima.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:451"
+    ]
+  },
+  "app.dica_use_a_op_o_11_para_gerar_um_apk_e_d": {
+    "pt": " Dica: use a opção 11 para gerar um APK e depois 'readroid verify' nele.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:468"
+    ]
+  },
+  "app.manifesto": {
+    "pt": "Manifesto",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:507"
+    ]
+  },
+  "app.mb": {
+    "pt": " MB)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:97"
+    ]
+  },
+  "app.apktool": {
+    "pt": "*_apktool",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:126"
+    ]
+  },
+  "app.n_o_encontrado": {
+    "pt": "não encontrado",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:187"
+    ]
+  },
+  "app.explorador_readroid": {
+    "pt": "\nExplorador ReaDroid: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:258"
+    ]
+  },
+  "app.kb": {
+    "pt": " KB)",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:269"
+    ]
+  },
+  "app.caminho_fora_das_pastas_de_resultados_bl": {
+    "pt": "Caminho fora das pastas de resultados bloqueado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:291"
+    ]
+  },
+  "app.nenhuma_edi_o_v_lida_selecionada": {
+    "pt": "Nenhuma edição válida selecionada.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:379"
+    ]
+  },
+  "app.apk_pronto": {
+    "pt": "\nAPK pronto: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:439"
+    ]
+  },
+  "app.chave_removida_uma_nova_ser_criada_na_pr": {
+    "pt": "Chave removida. Uma nova será criada na próxima reconstrução.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:462"
+    ]
+  },
+  "app.scanner_strings": {
+    "pt": "Scanner strings",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:509"
+    ]
+  },
+  "app.manifesto_n_o_decodificado_veja_a_mensag": {
+    "pt": "Manifesto não decodificado. Veja a mensagem no relatório.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:171"
+    ]
+  },
+  "app.a_an_lise_falhou": {
+    "pt": "A análise falhou: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:179"
+    ]
+  },
+  "app.n_o_foi_poss_vel_abrir_o_arquivo": {
+    "pt": "Não foi possível abrir o arquivo: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:250"
+    ]
+  },
+  "app.abrir": {
+    "pt": "Abrir > ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:274"
+    ]
+  },
+  "app.sele_o_inv_lida": {
+    "pt": "Seleção inválida.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:288"
+    ]
+  },
+  "app.abrindo_com_o_aplicativo_android_associa": {
+    "pt": "Abrindo com o aplicativo Android associado...",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:299"
+    ]
+  },
+  "app.n_o_h_termux_open_instalado_caminho_do_a": {
+    "pt": "Não há termux-open instalado. Caminho do arquivo:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:304"
+    ]
+  },
+  "app.instale_o_pacote_termux_tools_para_abrir": {
+    "pt": "Instale o pacote termux-tools para abrir arquivos no Android.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:305"
+    ]
+  },
+  "app.aplicado": {
+    "pt": "Aplicado: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:375"
+    ]
+  },
+  "app.renomear_o_pacote_applicationid_tamb_m_s": {
+    "pt": "Renomear o pacote (applicationId) também? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:381"
+    ]
+  },
+  "app.aplicar_alguma_edi_o_r_pida_antes_de_com": {
+    "pt": "Aplicar alguma edição rápida antes de compilar? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:400"
+    ]
+  },
+  "app.renomear_o_pacote_applicationid_antes_de": {
+    "pt": "Renomear o pacote (applicationId) antes de compilar? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:410"
+    ]
+  },
+  "app.c_pia_em": {
+    "pt": "Cópia em: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:447"
+    ]
+  },
+  "app.readroid": {
+    "pt": "\nReaDroid > ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:502"
+    ]
+  },
+  "app.sele_o_n_o_reconhecida_informe_o_caminho": {
+    "pt": "Seleção não reconhecida; informe o caminho manualmente.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:106",
+      "readroid/app.py:138"
+    ]
+  },
+  "app.caminho_completo_do_apk": {
+    "pt": "Caminho completo do APK: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:107"
+    ]
+  },
+  "app.caminho_da_pasta_decodificada_sa_da_do_a": {
+    "pt": "Caminho da pasta decodificada (saída do Apktool): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:139"
+    ]
+  },
+  "app.aten_o_categorias_truncadas_limite_ating": {
+    "pt": "Atenção: categorias truncadas (limite atingido): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:175"
+    ]
+  },
+  "app.n_o_foi_poss_vel_listar_a_pasta": {
+    "pt": "Não foi possível listar a pasta: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:262"
+    ]
+  },
+  "app.n_o_foi_poss_vel_abrir_externamente_cami": {
+    "pt": "Não foi possível abrir externamente. Caminho:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:302"
+    ]
+  },
+  "app.op_o_inv_lida": {
+    "pt": "Opção inválida.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:330"
+    ]
+  },
+  "app.continuar_mesmo_assim_s_n": {
+    "pt": "Continuar mesmo assim? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:396"
+    ]
+  },
+  "app.apagar_esta_chave_e_gerar_outra_no_pr_xi": {
+    "pt": "Apagar esta chave e gerar outra no próximo build? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:460"
+    ]
+  },
+  "app.enter_para_pr_xima_p_gina_q_para_sair": {
+    "pt": "\nENTER para próxima página, q para sair: ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:244"
+    ]
+  },
+  "app.abrir_o_instalador_do_android_agora_s_n": {
+    "pt": "Abrir o instalador do Android agora? (s/N): ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:448"
+    ]
+  },
+  "app.destino": {
+    "pt": "Destino:",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:518",
+      "readroid/app.py:530"
+    ]
+  },
+  "app.a_decompila_o_pode_demorar_e_consumir_ra": {
+    "pt": "A decompilação pode demorar e consumir RAM. Use APKs confiáveis e que você tem autorização para analisar.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:514"
+    ]
+  },
+  "app.a_extra_o_pode_levar_alguns_minutos_o_ap": {
+    "pt": "A extração pode levar alguns minutos. O APK original não será alterado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:526"
+    ]
+  },
+  "app.processo_conclu_do": {
+    "pt": "Processo concluído.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:517",
+      "readroid/app.py:529"
+    ]
+  },
+  "app.edite_os_arquivos_dentro_dessa_pasta_e_d": {
+    "pt": "Edite os arquivos dentro dessa pasta e depois use as opções 10/11.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:535"
+    ]
+  },
+  "app.salvar_em": {
+    "pt": "Salvar em ",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:515",
+      "readroid/app.py:527"
+    ]
+  },
+  "app.at_a_pr_xima_readroid_encerrado": {
+    "pt": "Até a próxima. ReaDroid encerrado.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:551"
+    ]
+  },
+  "app.op_o_n_o_reconhecida": {
+    "pt": "Opção não reconhecida.",
+    "tr": "",
+    "sites": [
+      "readroid/app.py:554"
+    ]
+  },
+  "analyzer.permiss_es_e_flags_s_o_sinais_para_revis": {
+    "pt": "Permissões e flags são sinais para revisão; não classificam sozinhos um app como seguro ou malicioso.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:224"
+    ]
+  },
+  "analyzer.uses_permission": {
+    "pt": "uses-permission",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:133"
+    ]
+  },
+  "analyzer.uses_permission_sdk_23": {
+    "pt": "uses-permission-sdk-23",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:133"
+    ]
+  },
+  "analyzer.uses_permission_sdk_m": {
+    "pt": "uses-permission-sdk-m",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:133"
+    ]
+  },
+  "analyzer.s_o_correspond_ncias_textuais_n_o_confir": {
+    "pt": "São correspondências textuais, não confirmação de conexões ou atividade maliciosa. Domínios podem ser nomes de bibliotecas, documentação ou exemplos. Categorias em 'truncated_categories' bateram no limite de itens e podem estar incompletas.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:287"
+    ]
+  },
+  "analyzer.threads_count": {
+    "pt": "--threads-count",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:302"
+    ]
+  },
+  "analyzer.o_caminho_n_o_aponta_para_um_arquivo_exi": {
+    "pt": "O caminho não aponta para um arquivo existente.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:72"
+    ]
+  },
+  "analyzer.o_arquivo_est_vazio": {
+    "pt": "O arquivo está vazio.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:74"
+    ]
+  },
+  "analyzer.o_arquivo_n_o_parece_ser_um_apk_zip_v_li": {
+    "pt": "O arquivo não parece ser um APK/ZIP válido (não é um ZIP).",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:76"
+    ]
+  },
+  "analyzer.extens_o_incomum_para_apk": {
+    "pt": "Extensão incomum para APK (",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:81"
+    ]
+  },
+  "analyzer.analisando_pelo_conte_do_mesmo_assim": {
+    "pt": "); analisando pelo conteúdo mesmo assim.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:81"
+    ]
+  },
+  "analyzer.inspe_o_est_tica_a_presen_a_de_um_arquiv": {
+    "pt": "Inspeção estática; a presença de um arquivo não prova comportamento malicioso.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:113"
+    ]
+  },
+  "analyzer.manifesto_n_o_xml_textual_v_lido_tente_j": {
+    "pt": "Manifesto não é XML textual válido; tente JADX/Apktool para decodificar AXML.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:127"
+    ]
+  },
+  "analyzer.versioncode": {
+    "pt": "versionCode",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:131"
+    ]
+  },
+  "analyzer.versionname": {
+    "pt": "versionName",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:132"
+    ]
+  },
+  "analyzer.androidmanifest_xml_n_o_foi_encontrado_d": {
+    "pt": "AndroidManifest.xml não foi encontrado dentro do APK.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:167"
+    ]
+  },
+  "analyzer.aapt2_dump_permissions": {
+    "pt": "aapt2 dump permissions",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:218"
+    ]
+  },
+  "analyzer.jadx_n_o_encontrado_instale_o_pelo_repos": {
+    "pt": "JADX não encontrado. Instale-o pelo repositório do Termux e tente novamente.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:299"
+    ]
+  },
+  "analyzer.decompila_o_conclu_da_arquivos_gerados": {
+    "pt": "Decompilação concluída. Arquivos gerados: ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:313"
+    ]
+  },
+  "analyzer.fontes_java": {
+    "pt": "; fontes Java: ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:313"
+    ]
+  },
+  "analyzer.apktool_n_o_encontrado_o_restante_do_rea": {
+    "pt": "Apktool não encontrado. O restante do ReaDroid continua funcionando sem ele.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:334"
+    ]
+  },
+  "analyzer.utf_8": {
+    "pt": "utf-8",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:345",
+      "readroid/analyzer.py:267"
+    ]
+  },
+  "analyzer.ferramenta_n_o_encontrada": {
+    "pt": "Ferramenta não encontrada.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:58"
+    ]
+  },
+  "analyzer.activity_alias": {
+    "pt": "activity-alias",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:147"
+    ]
+  },
+  "analyzer.no_src": {
+    "pt": "--no-src",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:189"
+    ]
+  },
+  "analyzer.decompila_o_parcial_o_jadx_retornou_c_di": {
+    "pt": "Decompilação parcial: o JADX retornou código ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:316"
+    ]
+  },
+  "analyzer.mas_gerou": {
+    "pt": ", mas gerou ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:316"
+    ]
+  },
+  "analyzer.arquivo_s_incluindo": {
+    "pt": " arquivo(s), incluindo ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:317"
+    ]
+  },
+  "analyzer.fonte_s_java_confira_os_logs_alguns_trec": {
+    "pt": " fonte(s) Java. Confira os logs; alguns trechos podem estar incompletos.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:317"
+    ]
+  },
+  "analyzer.a_decompila_o_falhou_c_digo_de_retorno": {
+    "pt": "A decompilação falhou (código de retorno: ",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:321"
+    ]
+  },
+  "analyzer.nenhum_arquivo_foi_encontrado_na_pasta_d": {
+    "pt": "). Nenhum arquivo foi encontrado na pasta de saída. Confira os logs.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:321"
+    ]
+  },
+  "analyzer.smali": {
+    "pt": "smali*",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:337"
+    ]
+  },
+  "analyzer.tempo_limite": {
+    "pt": "Tempo limite (",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:60"
+    ]
+  },
+  "analyzer.s_excedido": {
+    "pt": "s) excedido.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:60"
+    ]
+  },
+  "analyzer.sem_extens_o": {
+    "pt": "sem extensão",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:81"
+    ]
+  },
+  "analyzer.res": {
+    "pt": "res/",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:92"
+    ]
+  },
+  "analyzer.assets": {
+    "pt": "assets/",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:93",
+      "readroid/analyzer.py:254"
+    ]
+  },
+  "analyzer.xml_texto": {
+    "pt": "XML texto",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:99"
+    ]
+  },
+  "analyzer.xml_bin_rio_android_axml": {
+    "pt": "XML binário Android (AXML)",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:99"
+    ]
+  },
+  "analyzer.n_o_foi_poss_vel_ler": {
+    "pt": "não foi possível ler",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:101"
+    ]
+  },
+  "analyzer.lib": {
+    "pt": "lib/",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:91"
+    ]
+  },
+  "analyzer.falha_ao_decodificar_o_axml_nativamente": {
+    "pt": "Falha ao decodificar o AXML nativamente (",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:182"
+    ]
+  },
+  "analyzer.tentando_ferramentas_externas": {
+    "pt": "); tentando ferramentas externas.",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:182"
+    ]
+  },
+  "analyzer.maxsdkversion": {
+    "pt": "maxSdkVersion",
+    "tr": "",
+    "sites": [
+      "readroid/analyzer.py:139"
+    ]
+  },
+  "builder.readroid123": {
+    "pt": "readroid123",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:26"
+    ]
+  },
+  "builder.ativar_android_debuggable": {
+    "pt": "Ativar android:debuggable",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:31"
+    ]
+  },
+  "builder.desativar_android_debuggable": {
+    "pt": "Desativar android:debuggable",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:32"
+    ]
+  },
+  "builder.desativar_android_allowbackup": {
+    "pt": "Desativar android:allowBackup",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:33"
+    ]
+  },
+  "builder.permitir_tr_fego_http_usescleartexttraff": {
+    "pt": "Permitir tráfego HTTP (usesCleartextTraffic)",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:34"
+    ]
+  },
+  "builder.adicionar_permiss_o_de_internet": {
+    "pt": "Adicionar permissão de INTERNET",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:35"
+    ]
+  },
+  "builder.cn_readroid_ou_offensivetec_o_offensivet": {
+    "pt": "CN=ReaDroid, OU=OffensiveTec, O=OffensiveTec, L=Local, ST=Local, C=BR",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:190"
+    ]
+  },
+  "builder.smali": {
+    "pt": "*.smali",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:156"
+    ]
+  },
+  "builder.melhor_esfor_o_reflection_strings_de_pac": {
+    "pt": "Melhor esforço: reflection, strings de pacote montadas em runtime ou ofuscação pesada podem não ser cobertas. Teste o APK antes de confiar nele.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:176"
+    ]
+  },
+  "builder.genkeypair": {
+    "pt": "-genkeypair",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:191"
+    ]
+  },
+  "builder.keystore": {
+    "pt": "-keystore",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:191",
+      "readroid/builder.py:239"
+    ]
+  },
+  "builder.alias": {
+    "pt": "-alias",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:191"
+    ]
+  },
+  "builder.keyalg": {
+    "pt": "-keyalg",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:192"
+    ]
+  },
+  "builder.rsa": {
+    "pt": "RSA",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:192"
+    ]
+  },
+  "builder.keysize": {
+    "pt": "-keysize",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:192"
+    ]
+  },
+  "builder.validity": {
+    "pt": "-validity",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:192"
+    ]
+  },
+  "builder.storepass": {
+    "pt": "-storepass",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:193",
+      "readroid/builder.py:240"
+    ]
+  },
+  "builder.keypass": {
+    "pt": "-keypass",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:193",
+      "readroid/builder.py:240"
+    ]
+  },
+  "builder.dname": {
+    "pt": "-dname",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:193"
+    ]
+  },
+  "builder.nem_apksigner_nem_jarsigner_encontrados": {
+    "pt": "Nem apksigner nem jarsigner encontrados. Instale: pkg install apksigner  (ou openjdk-21 para o jarsigner).",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:248"
+    ]
+  },
+  "builder.reconstruindo_o_apk_apktool_b": {
+    "pt": "reconstruindo o APK (apktool b)",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:272"
+    ]
+  },
+  "builder.alinhando_zipalign": {
+    "pt": "alinhando (zipalign)",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:278"
+    ]
+  },
+  "builder.preparando_a_chave_de_assinatura": {
+    "pt": "preparando a chave de assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:283"
+    ]
+  },
+  "builder.assinando_o_apk": {
+    "pt": "assinando o APK",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:288"
+    ]
+  },
+  "builder.verificando_a_assinatura": {
+    "pt": "verificando a assinatura",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:293"
+    ]
+  },
+  "builder.androidmanifest_xml_n_o_encontrado_rode": {
+    "pt": "AndroidManifest.xml não encontrado. Rode a extração com Apktool primeiro.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:46",
+      "readroid/builder.py:103"
+    ]
+  },
+  "builder.utf_8": {
+    "pt": "utf-8",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:47",
+      "readroid/builder.py:77",
+      "readroid/builder.py:108",
+      "readroid/builder.py:122",
+      "readroid/builder.py:168",
+      "readroid/builder.py:171",
+      "readroid/builder.py:158",
+      "readroid/builder.py:164"
+    ]
+  },
+  "builder.debuggable_true": {
+    "pt": "debuggable=true",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:60"
+    ]
+  },
+  "builder.debuggable_false": {
+    "pt": "debuggable=false",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:63"
+    ]
+  },
+  "builder.allowbackup_false": {
+    "pt": "allowBackup=false",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:66"
+    ]
+  },
+  "builder.uses_permission_internet_adicionada": {
+    "pt": "uses-permission INTERNET adicionada",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:76"
+    ]
+  },
+  "builder.nome_de_pacote_inv_lido_use_o_formato_co": {
+    "pt": "Nome de pacote inválido. Use o formato com.exemplo.app (letras, números, '_' e pelo menos um ponto).",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:105"
+    ]
+  },
+  "builder.n_o_encontrei_o_atributo_package_no_andr": {
+    "pt": "Não encontrei o atributo package= no AndroidManifest.xml.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:111"
+    ]
+  },
+  "builder.o_pacote_j_esse_nada_para_renomear": {
+    "pt": "O pacote já é esse; nada para renomear.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:116"
+    ]
+  },
+  "builder.package": {
+    "pt": "package=\"",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:121"
+    ]
+  },
+  "builder.smali_2": {
+    "pt": "smali*",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:126"
+    ]
+  },
+  "builder.pacote_renomeado_de": {
+    "pt": "Pacote renomeado de ",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:175"
+    ]
+  },
+  "builder.para": {
+    "pt": " para ",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:175"
+    ]
+  },
+  "builder.keytool_n_o_encontrado_instale_pkg_insta": {
+    "pt": "keytool não encontrado. Instale: pkg install openjdk-21",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:188"
+    ]
+  },
+  "builder.apktool_n_o_encontrado_instale_pkg_insta": {
+    "pt": "Apktool não encontrado. Instale: pkg install apktool",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:204"
+    ]
+  },
+  "builder.zipalign_n_o_encontrado_pkg_install_aapt": {
+    "pt": "zipalign não encontrado (pkg install aapt). Seguindo sem alinhar - o APK ainda deve instalar normalmente fora da Play Store.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:219"
+    ]
+  },
+  "builder.ks": {
+    "pt": "--ks",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:231"
+    ]
+  },
+  "builder.ks_key_alias": {
+    "pt": "--ks-key-alias",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:231"
+    ]
+  },
+  "builder.ks_pass": {
+    "pt": "--ks-pass",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:232"
+    ]
+  },
+  "builder.key_pass": {
+    "pt": "--key-pass",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:232"
+    ]
+  },
+  "builder.sigalg": {
+    "pt": "-sigalg",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:239"
+    ]
+  },
+  "builder.sha256withrsa": {
+    "pt": "SHA256withRSA",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:239"
+    ]
+  },
+  "builder.digestalg": {
+    "pt": "-digestalg",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:239"
+    ]
+  },
+  "builder.sha_256": {
+    "pt": "SHA-256",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:239"
+    ]
+  },
+  "builder.v1_apenas": {
+    "pt": "v1 apenas",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:243"
+    ]
+  },
+  "builder.sem_apksigner_s_a_assinatura_v1_jar_foi": {
+    "pt": "Sem apksigner, só a assinatura v1 (JAR) foi aplicada. Apps com targetSdkVersion 24+ podem ser recusados pelo instalador do Android 7+. Para assinatura completa: pkg install apksigner",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:245"
+    ]
+  },
+  "builder.apksigner_n_o_encontrado_verifica_o_auto": {
+    "pt": "apksigner não encontrado; verificação automática pulada.",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:255"
+    ]
+  },
+  "builder.verbose": {
+    "pt": "--verbose",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:256"
+    ]
+  },
+  "builder.aplicando_edi_es_r_pidas_no_manifesto": {
+    "pt": "aplicando edições rápidas no manifesto",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:269"
+    ]
+  },
+  "builder.android": {
+    "pt": "android:",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:52",
+      "readroid/builder.py:54"
+    ]
+  },
+  "builder.application_b": {
+    "pt": "<application\\b",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:56"
+    ]
+  },
+  "builder.pasta_n_o_encontrada": {
+    "pt": "Pasta não encontrada: ",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:206"
+    ]
+  },
+  "builder.pass": {
+    "pt": "pass:",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:232"
+    ]
+  },
+  "builder.application_android": {
+    "pt": "<application android:",
+    "tr": "",
+    "sites": [
+      "readroid/builder.py:56"
+    ]
+  },
+  "axml.minsdkversion": {
+    "pt": "minSdkVersion",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:17"
+    ]
+  },
+  "axml.targetsdkversion": {
+    "pt": "targetSdkVersion",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:17"
+    ]
+  },
+  "axml.maxsdkversion": {
+    "pt": "maxSdkVersion",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:18",
+      "readroid/axml.py:148"
+    ]
+  },
+  "axml.versioncode": {
+    "pt": "versionCode",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:19",
+      "readroid/axml.py:143"
+    ]
+  },
+  "axml.versionname": {
+    "pt": "versionName",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:19",
+      "readroid/axml.py:144"
+    ]
+  },
+  "axml.iiii": {
+    "pt": "<IIII",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:29"
+    ]
+  },
+  "axml.di": {
+    "pt": "<%dI",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:31",
+      "readroid/axml.py:87"
+    ]
+  },
+  "axml.arquivo_pequeno_demais_para_ser_um_axml": {
+    "pt": "arquivo pequeno demais para ser um AXML",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:74"
+    ]
+  },
+  "axml.assinatura_axml_n_o_encontrada_0x0003_es": {
+    "pt": "assinatura AXML não encontrada (0x0003 esperado)",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:76"
+    ]
+  },
+  "axml.nenhum_elemento_xml_encontrado": {
+    "pt": "nenhum elemento XML encontrado",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:108"
+    ]
+  },
+  "axml.hhi": {
+    "pt": "<HHI",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:81"
+    ]
+  },
+  "axml.estrutura_axml_truncada_ou_adulterada": {
+    "pt": "estrutura AXML truncada ou adulterada (",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:106"
+    ]
+  },
+  "axml.lt": {
+    "pt": "&lt;",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:119"
+    ]
+  },
+  "axml.uses_permission": {
+    "pt": "uses-permission",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:145"
+    ]
+  },
+  "axml.uses_permission_sdk_23": {
+    "pt": "uses-permission-sdk-23",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:145"
+    ]
+  },
+  "axml.uses_permission_sdk_m": {
+    "pt": "uses-permission-sdk-m",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:145"
+    ]
+  },
+  "axml.utf_8": {
+    "pt": "utf-8",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:44"
+    ]
+  },
+  "axml.utf_16_le": {
+    "pt": "utf-16-le",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:49"
+    ]
+  },
+  "axml.hhh": {
+    "pt": "<HHH",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:90"
+    ]
+  },
+  "axml.quot": {
+    "pt": "&quot;",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:119"
+    ]
+  },
+  "axml.android": {
+    "pt": "android:",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:120"
+    ]
+  },
+  "axml.iiihbbi": {
+    "pt": "<IIIHBBI",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:95"
+    ]
+  },
+  "axml.activity_alias": {
+    "pt": "activity-alias",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:155"
+    ]
+  },
+  "axml.amp": {
+    "pt": "&amp;",
+    "tr": "",
+    "sites": [
+      "readroid/axml.py:119"
+    ]
+  },
+  "install.sh.pwd": {
+    "pt": " && pwd)",
+    "tr": "",
+    "sites": [
+      "install.sh:4"
+    ]
+  },
+  "install.sh.prefix": {
+    "pt": "$PREFIX",
+    "tr": "",
+    "sites": [
+      "install.sh:6"
+    ]
+  },
+  "install.sh.este_instalador_foi_feito_para_termux_ab": {
+    "pt": "Este instalador foi feito para Termux. Abra o Termux e tente novamente.",
+    "tr": "",
+    "sites": [
+      "install.sh:7"
+    ]
+  },
+  "install.sh.o_n_cleo_usa_apenas_a_biblioteca_padr_o": {
+    "pt": "O núcleo usa apenas a biblioteca padrão do Python.\\n",
+    "tr": "",
+    "sites": [
+      "install.sh:12"
+    ]
+  },
+  "install.sh.jadx_apktool_aapt_zipalign_e_apksigner_s": {
+    "pt": "JADX, Apktool, aapt (zipalign) e apksigner são opcionais, para decompilação,\\n",
+    "tr": "",
+    "sites": [
+      "install.sh:13"
+    ]
+  },
+  "install.sh.extra_o_avan_ada_e_para_reconstruir_assi": {
+    "pt": "extração avançada e para reconstruir/assinar um APK já pronto para instalar.\\n\\n",
+    "tr": "",
+    "sites": [
+      "install.sh:14"
+    ]
+  },
+  "install.sh.instalar_atualizar_python_java_jadx_apkt": {
+    "pt": "Instalar/atualizar Python, Java, JADX, Apktool, aapt e apksigner via pkg? [s/N] ",
+    "tr": "",
+    "sites": [
+      "install.sh:15"
+    ]
+  },
+  "install.sh.answer": {
+    "pt": "$answer",
+    "tr": "",
+    "sites": [
+      "install.sh:16"
+    ]
+  },
+  "install.sh.apksigner_indispon_vel_neste_reposit_rio": {
+    "pt": "apksigner indisponível neste repositório; seguindo sem ele (jarsigner cobre o básico).",
+    "tr": "",
+    "sites": [
+      "install.sh:22"
+    ]
+  },
+  "install.sh.pulando_instala_o_de_pacotes_o_menu_b_si": {
+    "pt": "Pulando instalação de pacotes. O menu básico ainda pode ser usado.",
+    "tr": "",
+    "sites": [
+      "install.sh:25"
+    ]
+  },
+  "install.sh.script_dir_reports": {
+    "pt": "$SCRIPT_DIR/reports",
+    "tr": "",
+    "sites": [
+      "install.sh:29"
+    ]
+  },
+  "install.sh.script_dir_output": {
+    "pt": "$SCRIPT_DIR/output",
+    "tr": "",
+    "sites": [
+      "install.sh:29"
+    ]
+  },
+  "install.sh.script_dir_builds": {
+    "pt": "$SCRIPT_DIR/builds",
+    "tr": "",
+    "sites": [
+      "install.sh:29"
+    ]
+  },
+  "install.sh.script_dir": {
+    "pt": "$SCRIPT_DIR",
+    "tr": "",
+    "sites": [
+      "install.sh:34"
+    ]
+  }
+}

@@ -7,3 +7,7 @@ builds/
 *.apk
 *.jks
 .venv/
+
+# Gerado por tools/extract_strings.py; reproduzível, não entra no histórico.
+locales/worklist.json
+locales/tr.keys.json

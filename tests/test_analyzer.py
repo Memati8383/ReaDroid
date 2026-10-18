@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import struct
 import sys
 import tempfile
@@ -12,7 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from readroid.analyzer import (analyze_manifest, decompile_with_jadx, inspect_apk,
                                scan_strings, validate_apk)
-from readroid import __version__, axml, builder
+from readroid import __version__, axml, builder, i18n
+
+# Este arquivo afirma sobre textos (decoded_by, mensagens do builder). Fixamos o
+# idioma em português para o resultado não depender do READROID_LANG de quem roda
+# a suíte. tests/test_i18n.py troca o idioma de propósito.
+os.environ["READROID_LANG"] = "pt"
+i18n.reload_for_tests("pt")
 
 
 # ---------------------------------------------------------------- fixtures

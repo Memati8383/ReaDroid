@@ -52,6 +52,7 @@ NOT_TEXT = [
     re.compile(r"^\x1b\["),
     re.compile(r"^%[-+ #0-9.]*[a-zA-Z]$"),
     re.compile(r"^[a-z_]+$"),                      # identificador / chave snake_case
+    re.compile(r"^[a-z][a-z0-9_]*\.[a-z0-9_.]+$"),  # chave de catálogo (t("menu.inspect"))
     re.compile(r"^\d+$"),
     re.compile(r"^[/\\.]{1,2}[/\\]?|^~"),          # caminho
     re.compile(r"^[a-zA-Z]:\\"),                   # caminho Windows

@@ -21,19 +21,17 @@ from pathlib import Path
 from typing import Any
 
 from .analyzer import _run, sha256_file  # mesmo helper de subprocess já usado no projeto
+from .i18n import t
 
 DEFAULT_ALIAS = "readroid"
 DEFAULT_STOREPASS = "readroid123"
 
 # Pequenas edições que só fazem sentido numa pasta já decodificada pelo Apktool,
 # porque é aí que o AndroidManifest.xml volta a ser texto editável.
-QUICK_EDITS = {
-    "debuggable_on": "Ativar android:debuggable",
-    "debuggable_off": "Desativar android:debuggable",
-    "allowbackup_off": "Desativar android:allowBackup",
-    "cleartext_on": "Permitir tráfego HTTP (usesCleartextTraffic)",
-    "add_internet": "Adicionar permissão de INTERNET",
-}
+# Os rótulos ficam em t("builder.edit.<chave>") e são resolvidos na hora de
+# exibir, para que trocar READROID_LANG em tempo de execução faça efeito.
+QUICK_EDIT_KEYS = ("debuggable_on", "debuggable_off", "allowbackup_off",
+                   "cleartext_on", "add_internet")
 
 
 def _manifest_path(decoded_dir: Path) -> Path:
@@ -43,7 +41,7 @@ def _manifest_path(decoded_dir: Path) -> Path:
 def apply_quick_edits(decoded_dir: Path, edits: list[str]) -> dict[str, Any]:
     manifest = _manifest_path(decoded_dir)
     if not manifest.is_file():
-        return {"ok": False, "message": "AndroidManifest.xml não encontrado. Rode a extração com Apktool primeiro."}
+        return {"ok": False, "message": t("builder.err.no_manifest")}
     text = manifest.read_text(encoding="utf-8", errors="replace")
     applied = []
 
@@ -73,7 +71,7 @@ def apply_quick_edits(decoded_dir: Path, edits: list[str]) -> dict[str, Any]:
             r'\1\n    <uses-permission android:name="android.permission.INTERNET"/>',
             text, count=1,
         )
-        applied.append("uses-permission INTERNET adicionada")
+        applied.append(t("builder.edit.applied.internet"))
     manifest.write_text(text, encoding="utf-8")
     return {"ok": True, "applied": applied, "manifest": str(manifest)}
 
@@ -100,20 +98,19 @@ def rename_package(decoded_dir: Path, new_package: str) -> dict[str, Any]:
     """
     manifest = _manifest_path(decoded_dir)
     if not manifest.is_file():
-        return {"ok": False, "message": "AndroidManifest.xml não encontrado. Rode a extração com Apktool primeiro."}
+        return {"ok": False, "message": t("builder.err.no_manifest")}
     if not valid_package_name(new_package):
-        return {"ok": False, "message": "Nome de pacote inválido. Use o formato com.exemplo.app "
-                                        "(letras, números, '_' e pelo menos um ponto)."}
+        return {"ok": False, "message": t("builder.err.invalid_package")}
 
     text = manifest.read_text(encoding="utf-8", errors="replace")
     match = re.search(r'package="([^"]+)"', text)
     if not match:
-        return {"ok": False, "message": "Não encontrei o atributo package= no AndroidManifest.xml."}
+        return {"ok": False, "message": t("builder.err.no_package_attr")}
     old_package = match.group(1)
     if old_package == new_package:
         return {"ok": True, "old_package": old_package, "new_package": new_package,
                 "directories_moved": 0, "files_updated": 0,
-                "message": "O pacote já é esse; nada para renomear."}
+                "message": t("builder.rename.same")}
 
     old_path, new_path = old_package.replace(".", "/"), new_package.replace(".", "/")
 
@@ -172,9 +169,8 @@ def rename_package(decoded_dir: Path, new_package: str) -> dict[str, Any]:
 
     return {"ok": True, "old_package": old_package, "new_package": new_package,
             "directories_moved": directories_moved, "files_updated": files_updated,
-            "message": f"Pacote renomeado de {old_package} para {new_package}.",
-            "warning": "Melhor esforço: reflection, strings de pacote montadas em runtime ou "
-                       "ofuscação pesada podem não ser cobertas. Teste o APK antes de confiar nele."}
+            "message": t("builder.rename.done", old=old_package, new=new_package),
+            "warning": t("builder.rename.best_effort")}
 
 
 def ensure_keystore(keystore_path: Path, alias: str = DEFAULT_ALIAS,
@@ -185,7 +181,7 @@ def ensure_keystore(keystore_path: Path, alias: str = DEFAULT_ALIAS,
     keytool = shutil.which("keytool")
     if not keytool:
         return {"ok": False, "created": False,
-                "message": "keytool não encontrado. Instale: pkg install openjdk-21"}
+                "message": t("builder.err.no_keytool")}
     keystore_path.parent.mkdir(parents=True, exist_ok=True)
     dname = "CN=ReaDroid, OU=OffensiveTec, O=OffensiveTec, L=Local, ST=Local, C=BR"
     cmd = [keytool, "-genkeypair", "-keystore", str(keystore_path), "-alias", alias,
@@ -201,9 +197,9 @@ def rebuild_apk(decoded_dir: Path, output_apk: Path) -> dict[str, Any]:
     """apktool b: reconstrói o APK a partir da pasta decodificada (smali + recursos)."""
     apktool = shutil.which("apktool")
     if not apktool:
-        return {"ok": False, "message": "Apktool não encontrado. Instale: pkg install apktool"}
+        return {"ok": False, "message": t("builder.err.no_apktool")}
     if not decoded_dir.is_dir():
-        return {"ok": False, "message": f"Pasta não encontrada: {decoded_dir}"}
+        return {"ok": False, "message": t("builder.err.dir_missing", path=decoded_dir)}
     output_apk.parent.mkdir(parents=True, exist_ok=True)
     result = _run([apktool, "b", str(decoded_dir), "-o", str(output_apk)], timeout=600)
     ok = result["returncode"] == 0 and output_apk.is_file()
@@ -216,8 +212,7 @@ def align_apk(in_apk: Path, out_apk: Path) -> dict[str, Any]:
     zipalign = shutil.which("zipalign")
     if not zipalign:
         return {"ok": False, "skipped": True,
-                "message": "zipalign não encontrado (pkg install aapt). Seguindo sem alinhar - "
-                           "o APK ainda deve instalar normalmente fora da Play Store."}
+                "message": t("builder.err.no_zipalign")}
     result = _run([zipalign, "-f", "-p", "4", str(in_apk), str(out_apk)], timeout=180)
     ok = result["returncode"] == 0 and out_apk.is_file()
     return {"ok": ok, "skipped": False, "returncode": result["returncode"], "stderr": result["stderr"][-2000:]}
@@ -240,19 +235,16 @@ def sign_apk(apk: Path, keystore: Path, alias: str = DEFAULT_ALIAS,
                "-storepass", storepass, "-keypass", keypass or storepass, str(apk), alias]
         result = _run(cmd, timeout=180)
         ok = result["returncode"] == 0
-        return {"ok": ok, "tool": "jarsigner", "scheme": "v1 apenas", "returncode": result["returncode"],
+        return {"ok": ok, "tool": "jarsigner", "scheme": t("builder.scheme.v1_only"), "returncode": result["returncode"],
                 "stderr": result["stderr"][-2000:],
-                "warning": "Sem apksigner, só a assinatura v1 (JAR) foi aplicada. Apps com "
-                           "targetSdkVersion 24+ podem ser recusados pelo instalador do Android 7+. "
-                           "Para assinatura completa: pkg install apksigner"}
-    return {"ok": False, "message": "Nem apksigner nem jarsigner encontrados. Instale: "
-                                    "pkg install apksigner  (ou openjdk-21 para o jarsigner)."}
+                "warning": t("builder.sign.v1_warning")}
+    return {"ok": False, "message": t("builder.err.no_signer")}
 
 
 def verify_apk(apk: Path) -> dict[str, Any]:
     apksigner = shutil.which("apksigner")
     if not apksigner:
-        return {"ok": None, "message": "apksigner não encontrado; verificação automática pulada."}
+        return {"ok": None, "message": t("builder.err.no_apksigner_verify")}
     result = _run([apksigner, "verify", "--verbose", str(apk)], timeout=60)
     return {"ok": result["returncode"] == 0, "stdout": result["stdout"][-3000:], "stderr": result["stderr"][-2000:]}
 
@@ -266,31 +258,31 @@ def build_pipeline(decoded_dir: Path, work_dir: Path, keystore: Path, alias: str
     work_dir.mkdir(parents=True, exist_ok=True)
 
     if quick_edits:
-        say("aplicando edições rápidas no manifesto")
+        say(t("builder.say.quick_edits"))
         steps["quick_edits"] = apply_quick_edits(decoded_dir, quick_edits)
 
-    say("reconstruindo o APK (apktool b)")
+    say(t("builder.say.rebuild"))
     unsigned = work_dir / "unsigned.apk"
     steps["rebuild"] = rebuild_apk(decoded_dir, unsigned)
     if not steps["rebuild"]["ok"]:
         return {"ok": False, "steps": steps, "final_apk": None}
 
-    say("alinhando (zipalign)")
+    say(t("builder.say.align"))
     aligned = work_dir / "aligned.apk"
     steps["align"] = align_apk(unsigned, aligned)
     to_sign = aligned if steps["align"].get("ok") else unsigned
 
-    say("preparando a chave de assinatura")
+    say(t("builder.say.keystore"))
     steps["keystore"] = ensure_keystore(keystore, alias, storepass)
     if not steps["keystore"]["ok"]:
         return {"ok": False, "steps": steps, "final_apk": None}
 
-    say("assinando o APK")
+    say(t("builder.say.sign"))
     steps["sign"] = sign_apk(to_sign, keystore, alias, storepass)
     if not steps["sign"]["ok"]:
         return {"ok": False, "steps": steps, "final_apk": None}
 
-    say("verificando a assinatura")
+    say(t("builder.say.verify"))
     steps["verify"] = verify_apk(to_sign)
     steps["sha256"] = sha256_file(to_sign)
     return {"ok": True, "steps": steps, "final_apk": str(to_sign)}

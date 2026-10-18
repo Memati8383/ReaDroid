@@ -10,6 +10,8 @@ from __future__ import annotations
 import struct
 from typing import Any
 
+from .i18n import t
+
 # Quando o nome do atributo não vem como string (manifest compactado/ofuscado),
 # ele vem só como um ID de recurso do Android; traduzimos os mais comuns aqui.
 _RES_IDS = {
@@ -71,9 +73,9 @@ def _value(strings: list, raw: int, dtype: int, val: int) -> str:
 def parse_events(data: bytes) -> list:
     """Devolve a lista de eventos do XML: ('start', tag, {attrs}) ou ('end', tag, None)."""
     if len(data) < 8:
-        raise AxmlError("arquivo pequeno demais para ser um AXML")
+        raise AxmlError(t("axml.err.too_small"))
     if struct.unpack_from("<H", data, 0)[0] != 0x0003:
-        raise AxmlError("assinatura AXML não encontrada (0x0003 esperado)")
+        raise AxmlError(t("axml.err.no_signature"))
     pos = struct.unpack_from("<H", data, 2)[0]
     strings, res_map, events = [], [], []
     try:
@@ -103,9 +105,9 @@ def parse_events(data: bytes) -> list:
                 events.append(("end", strings[name_idx] if name_idx < len(strings) else "?", None))
             pos += csize
     except (struct.error, IndexError) as exc:
-        raise AxmlError(f"estrutura AXML truncada ou adulterada ({exc})") from exc
+        raise AxmlError(t("axml.err.truncated", error=exc)) from exc
     if not events:
-        raise AxmlError("nenhum elemento XML encontrado")
+        raise AxmlError(t("axml.err.no_events"))
     return events
 
 

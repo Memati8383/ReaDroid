@@ -12,8 +12,9 @@ from typing import Callable
 from . import __version__
 from .analyzer import (analyze_manifest, decompile_with_jadx, extension_warning, extract_smali_with_apktool,
                        inspect_apk, scan_strings, write_report)
-from .builder import (DEFAULT_ALIAS, DEFAULT_STOREPASS, QUICK_EDITS, apply_quick_edits, build_pipeline,
+from .builder import (DEFAULT_ALIAS, DEFAULT_STOREPASS, QUICK_EDIT_KEYS, apply_quick_edits, build_pipeline,
                       rename_package, valid_package_name, verify_apk)
+from .i18n import is_exit, is_other_path, is_yes, t
 
 # Usa a pasta desta cópia do projeto, não uma pasta fixa em ~/ReaDroid.
 # Isso evita salvar os resultados em outro lugar quando o projeto foi extraído
@@ -45,14 +46,16 @@ def width() -> int:
 
 def banner() -> None:
     clear()
-    inner = min(width() - 2, 42)
     title = f" ReaDroid v{__version__}"
-    subtitle = " Sem IA · Sem root · 100% offline"
+    subtitle = t("banner.subtitle")
+    # A caixa nasce do conteúdo, não de um número fixo: o texto traduzido pode ser
+    # mais largo que o original e estourar a borda num terminal estreito.
+    inner = min(max(len(title), len(subtitle)) + 2, width() - 2)
     print(GREEN + "╭" + "─" * inner + "╮" + RESET)
     print(GREEN + "│" + RESET + BOLD + title.ljust(inner) + RESET + GREEN + "│" + RESET)
     print(GREEN + "│" + RESET + CYAN + subtitle.ljust(inner) + RESET + GREEN + "│" + RESET)
     print(GREEN + "╰" + "─" * inner + "╯" + RESET)
-    print((" " * max(inner - 10, 0)) + DIM + "OffensiveTec" + RESET)
+    print((" " * max(inner - 12, 0)) + DIM + t("banner.watermark") + RESET)
 
 
 def safe_input(prompt: str = "") -> str:
@@ -65,7 +68,7 @@ def safe_input(prompt: str = "") -> str:
 
 
 def pause() -> None:
-    safe_input("\nENTER para voltar ao menu...")
+    safe_input("\n" + t("ui.pause"))
 
 
 def ask_apk() -> Path | None:
@@ -90,29 +93,29 @@ def ask_apk() -> Path | None:
             continue
     candidates = candidates[:20]
     if candidates:
-        print(CYAN + "APKs encontrados nas pastas comuns:" + RESET)
+        print(CYAN + t("apk.found") + RESET)
         for index, item in enumerate(candidates, 1):
             try:
                 size_mb = item.stat().st_size / (1024 * 1024)
                 print(f" [{index}] {sanitize(item.name)} ({size_mb:.1f} MB)")
             except OSError:
                 print(f" [{index}] {sanitize(item.name)}")
-        print(" [P] Informar outro caminho")
-        choice = safe_input("Escolha um APK: ").strip()
-        if choice.lower() != "p":
+        print(t("apk.other"))
+        choice = safe_input(t("apk.choose")).strip()
+        if not is_other_path(choice):
             try:
                 return candidates[int(choice) - 1]
             except (ValueError, IndexError):
-                print(YELLOW + "Seleção não reconhecida; informe o caminho manualmente." + RESET)
-    raw = safe_input("Caminho completo do APK: ").strip().strip('"').strip("'")
+                print(YELLOW + t("apk.bad_choice") + RESET)
+    raw = safe_input(t("apk.path")).strip().strip('"').strip("'")
     if not raw:
-        print(YELLOW + "Nenhum arquivo informado." + RESET)
+        print(YELLOW + t("apk.empty_path") + RESET)
         return None
     path = Path(raw).expanduser()
     if not path.is_absolute():
         path = Path.cwd() / path
     if not path.exists() or not path.is_file():
-        print(RED + "Arquivo não encontrado. Dica: execute termux-setup-storage e use ~/storage/shared/Download/app.apk" + RESET)
+        print(RED + t("apk.not_found") + RESET)
         return None
     warning = extension_warning(path)
     if warning:
@@ -126,22 +129,22 @@ def ask_decoded_dir() -> Path | None:
     candidates = sorted((p for p in OUTPUTS.glob("*_apktool") if p.is_dir()),
                         key=lambda p: p.stat().st_mtime, reverse=True)[:15]
     if candidates:
-        print(CYAN + "Pastas decodificadas com Apktool:" + RESET)
+        print(CYAN + t("dir.decoded_found") + RESET)
         for index, item in enumerate(candidates, 1):
             print(f" [{index}] {sanitize(item.name)}")
-        print(" [P] Informar outro caminho")
-        choice = safe_input("Escolha a pasta: ").strip()
-        if choice.lower() != "p":
+        print(t("apk.other"))
+        choice = safe_input(t("dir.choose")).strip()
+        if not is_other_path(choice):
             try:
                 return candidates[int(choice) - 1]
             except (ValueError, IndexError):
-                print(YELLOW + "Seleção não reconhecida; informe o caminho manualmente." + RESET)
-    raw = safe_input("Caminho da pasta decodificada (saída do Apktool): ").strip().strip('"').strip("'")
+                print(YELLOW + t("apk.bad_choice") + RESET)
+    raw = safe_input(t("dir.path")).strip().strip('"').strip("'")
     if not raw:
         return None
     path = Path(raw).expanduser()
     if not path.is_dir():
-        print(RED + "Pasta não encontrada." + RESET)
+        print(RED + t("dir.not_found") + RESET)
         return None
     return path
 
@@ -150,66 +153,68 @@ def save_and_show(report: dict, prefix: str, apk: Path) -> None:
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     target = REPORTS / f"{apk.stem}_{prefix}_{stamp}.json"
     write_report(report, target)
-    print(GREEN + f"\nRelatório salvo: {target}" + RESET)
+    print(GREEN + "\n" + t("report.saved", target=target) + RESET)
 
 
-def run_action(title: str, action: Callable[[Path], dict]) -> None:
-    print(CYAN + f"\n{title}" + RESET)
+def run_action(key: str, action: Callable[[Path], dict]) -> None:
+    # "key" é um identificador estável em ASCII: o nome do arquivo de relatório
+    # não deve depender do idioma da interface.
+    print(CYAN + "\n" + t(f"action.{key}.title") + RESET)
     apk = ask_apk()
     if apk is None:
         return
     try:
         report = action(apk)
-        save_and_show(report, title.lower().replace(" ", "_"), apk)
+        save_and_show(report, key, apk)
         for warning in report.get("warnings", []):
             print(YELLOW + warning + RESET)
         if "permissions" in report:
-            print(f"Permissões encontradas: {len(report.get('permissions', []))}")
+            print(t("report.permissions_found", count=len(report.get('permissions', []))))
             for item in report.get("permissions", [])[:25]:
                 print(" •", sanitize(item.get("name", "")))
             if not report.get("decoded"):
-                print(YELLOW + "Manifesto não decodificado. Veja a mensagem no relatório." + RESET)
+                print(YELLOW + t("report.manifest_not_decoded") + RESET)
         if "urls" in report:
-            print(f"URLs: {len(report['urls'])} | Domínios: {len(report['domains'])} | IPs candidatos: {len(report['ipv4_candidates'])}")
+            print(t("report.strings_summary", urls=len(report['urls']),
+                    domains=len(report['domains']), ips=len(report['ipv4_candidates'])))
             if report.get("truncated_categories"):
-                print(YELLOW + f"Atenção: categorias truncadas (limite atingido): {', '.join(report['truncated_categories'])}" + RESET)
+                print(YELLOW + t("report.truncated",
+                                 names=', '.join(report['truncated_categories'])) + RESET)
         if "zip_entry_count" in report:
-            print(f"Arquivos: {report['zip_entry_count']} | DEX: {len(report['dex_files'])} | Bibliotecas nativas: {len(report['native_libraries'])}")
+            print(t("report.zip_summary", files=report['zip_entry_count'],
+                    dex=len(report['dex_files']), libs=len(report['native_libraries'])))
     except Exception as exc:  # O menu não deve fechar por um erro inesperado de um arquivo.
-        print(RED + f"A análise falhou: {exc}" + RESET)
-        print("O arquivo original não foi modificado.")
+        print(RED + t("report.failed", error=exc) + RESET)
+        print(t("report.original_untouched"))
 
 
 def dependencies() -> None:
-    print(CYAN + "\nVERIFICAÇÃO DE DEPENDÊNCIAS" + RESET)
+    print(CYAN + "\n" + t("deps.title") + RESET)
     for name in ("python", "java", "jadx", "apktool", "aapt", "aapt2", "zipalign", "apksigner", "keytool", "unzip", "git"):
         path = shutil.which(name)
-        print(f"[{GREEN + 'OK' + RESET if path else YELLOW + '--' + RESET}] {name}: {path or 'não encontrado'}")
+        print(f"[{GREEN + 'OK' + RESET if path else YELLOW + '--' + RESET}] {name}: {path or t('deps.not_found')}")
     if shutil.which("java"):
         try:
             result = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
             print(sanitize((result.stderr or result.stdout).splitlines()[0]))
         except (OSError, subprocess.TimeoutExpired, IndexError):
-            print("Java encontrado, mas não foi possível consultar a versão.")
+            print(t("deps.java_no_version"))
     if shutil.which("jadx"):
         try:
             result = subprocess.run(["jadx", "--version"], capture_output=True, text=True, timeout=8)
             print("JADX:", sanitize((result.stdout or result.stderr).strip().splitlines()[0]))
         except (OSError, subprocess.TimeoutExpired, IndexError):
-            print("JADX localizado; versão não confirmada.")
-    print(CYAN + "\nPara reconstruir e assinar APKs (opção 11):" + RESET)
-    print(" pkg install apktool aapt apksigner openjdk-21")
-    print(" (aapt já inclui o zipalign; apksigner dá assinatura v1+v2+v3;")
-    print("  sem ele, cai para jarsigner, que só assina v1.)")
+            print(t("deps.jadx_no_version"))
+    print(CYAN + "\n" + t("deps.build_hint") + RESET)
 
 
 def open_folder(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
-    print("Pasta:", path)
-    print("Conteúdo:")
+    print(t("folder.path", path=path))
+    print(t("folder.content"))
     items = list(path.iterdir())
     if not items:
-        print(" (vazia por enquanto)")
+        print(t("folder.empty"))
     for item in sorted(items, key=lambda p: p.name.lower())[:60]:
         print(" [DIR]" if item.is_dir() else " [FILE]", sanitize(item.name))
 
@@ -225,8 +230,8 @@ def view_text_file(path: Path) -> None:
     """Abre arquivos de texto no próprio terminal, com paginação quando disponível."""
     try:
         if path.stat().st_size > 5 * 1024 * 1024:
-            print(YELLOW + "Arquivo grande (>5 MB); não será carregado inteiro na tela." + RESET)
-            print("Caminho:", path)
+            print(YELLOW + t("view.too_large") + RESET)
+            print(t("folder.path", path=path))
             return
         content = path.read_text(encoding="utf-8", errors="replace")
         clean = sanitize(content)
@@ -234,20 +239,20 @@ def view_text_file(path: Path) -> None:
         if less:
             # Sem -R: não interpretamos códigos de escape do arquivo, só mostramos como texto.
             # Um arquivo decompilado/extraído é conteúdo não confiável.
-            proc = subprocess.run([less], input=clean, text=True, check=False)
+            subprocess.run([less], input=clean, text=True, check=False)
             return
         lines = clean.splitlines()
         page_size = 120
         for start in range(0, max(1, len(lines)), page_size):
             print("\n".join(lines[start:start + page_size]))
             if start + page_size < len(lines):
-                answer = safe_input("\nENTER para próxima página, q para sair: ").strip().lower()
-                if answer == "q":
+                answer = safe_input("\n" + t("view.next_page")).strip().lower()
+                if answer in ("q", "s", "ç"):
                     break
         if not lines:
-            print("(arquivo vazio)")
+            print(t("view.empty"))
     except (OSError, UnicodeError) as exc:
-        print(RED + f"Não foi possível abrir o arquivo: {exc}" + RESET)
+        print(RED + t("view.open_error", error=exc) + RESET)
 
 
 def browse_directory(path: Path, allowed_roots: tuple[Path, ...]) -> None:
@@ -255,14 +260,14 @@ def browse_directory(path: Path, allowed_roots: tuple[Path, ...]) -> None:
     current = path.resolve()
     roots = tuple(root.resolve() for root in allowed_roots)
     while True:
-        print(CYAN + f"\nExplorador ReaDroid: {current}" + RESET)
+        print(CYAN + "\n" + t("browse.title", path=current) + RESET)
         try:
             entries = sorted(current.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower()))
         except OSError as exc:
-            print(RED + f"Não foi possível listar a pasta: {exc}" + RESET)
+            print(RED + t("browse.list_error", error=exc) + RESET)
             return
         if not entries:
-            print(" (pasta vazia)")
+            print(t("browse.empty"))
         for index, item in enumerate(entries, 1):
             kind = "[DIR] " if item.is_dir() else "[ARQ] "
             try:
@@ -270,11 +275,11 @@ def browse_directory(path: Path, allowed_roots: tuple[Path, ...]) -> None:
             except OSError:
                 size = ""
             print(f" [{index}] {kind}{sanitize(item.name)}{size}")
-        print(" [..] Voltar uma pasta | [0] Sair do explorador")
-        choice = safe_input("Abrir > ").strip().lower()
-        if choice in {"0", "q", "sair", ""}:
+        print(t("browse.nav"))
+        choice = safe_input(t("browse.prompt")).strip().lower()
+        if is_exit(choice):
             return
-        if choice in {"..", "p", "voltar"}:
+        if choice in {"..", "p", "voltar", "geri", "‹", "<"}:
             if current in roots:
                 return
             parent = current.parent.resolve()
@@ -285,10 +290,10 @@ def browse_directory(path: Path, allowed_roots: tuple[Path, ...]) -> None:
         try:
             selected = entries[int(choice) - 1].resolve()
         except (ValueError, IndexError):
-            print(YELLOW + "Seleção inválida." + RESET)
+            print(YELLOW + t("browse.invalid") + RESET)
             continue
         if not any(selected == root or root in selected.parents for root in roots):
-            print(RED + "Caminho fora das pastas de resultados bloqueado." + RESET)
+            print(RED + t("browse.blocked") + RESET)
             continue
         if selected.is_dir():
             current = selected
@@ -296,14 +301,14 @@ def browse_directory(path: Path, allowed_roots: tuple[Path, ...]) -> None:
             if selected.suffix.lower() in TEXT_EXTENSIONS or selected.suffix == "":
                 view_text_file(selected)
             elif shutil.which("termux-open"):
-                print("Abrindo com o aplicativo Android associado...")
+                print(t("browse.opening"))
                 result = subprocess.run([shutil.which("termux-open"), str(selected)], check=False)
                 if result.returncode:
-                    print("Não foi possível abrir externamente. Caminho:", selected)
+                    print(t("browse.cannot_open", path=selected))
             else:
-                print("Não há termux-open instalado. Caminho do arquivo:", selected)
-                print("Instale o pacote termux-tools para abrir arquivos no Android.")
-            safe_input("\nENTER para voltar ao explorador...")
+                print(t("browse.no_termux_open", path=selected))
+                print(t("browse.install_tools"))
+            safe_input("\n" + t("browse.back"))
 
 
 def browse_generated_files() -> None:
@@ -312,13 +317,13 @@ def browse_generated_files() -> None:
     REPORTS.mkdir(parents=True, exist_ok=True)
     BUILDS.mkdir(parents=True, exist_ok=True)
     while True:
-        print(CYAN + "\nARQUIVOS GERADOS" + RESET)
-        print(" [1] Código decompilado e recursos (output)")
-        print(" [2] Relatórios JSON (reports)")
-        print(" [3] APKs reconstruídos e assinados (builds)")
-        print(" [0] Voltar ao menu principal")
-        choice = safe_input("Explorar > ").strip()
-        if choice == "0" or choice == "":
+        print(CYAN + "\n" + t("gen.title") + RESET)
+        print(t("gen.output"))
+        print(t("gen.reports"))
+        print(t("gen.builds"))
+        print(t("gen.back"))
+        choice = safe_input(t("browse.prompt")).strip()
+        if is_exit(choice):
             return
         if choice == "1":
             browse_directory(OUTPUTS, (OUTPUTS, REPORTS, BUILDS))
@@ -327,7 +332,7 @@ def browse_generated_files() -> None:
         elif choice == "3":
             browse_directory(BUILDS, (OUTPUTS, REPORTS, BUILDS))
         else:
-            print(YELLOW + "Opção inválida." + RESET)
+            print(YELLOW + t("gen.invalid") + RESET)
 
 
 # ------------------------------------------------------------------ reconstrução e compilação
@@ -335,20 +340,19 @@ def browse_generated_files() -> None:
 def prompt_rename_package(decoded: Path) -> None:
     """Pergunta o novo applicationId, valida e aplica. Usado nos dois fluxos
     (opção 10 isolada e dentro da opção 11, antes de reconstruir)."""
-    print(DIM + "O pacote atual aparece no AndroidManifest.xml; isso move pastas smali" + RESET)
-    print(DIM + "e troca as referências de classe - é melhor esforço, teste o resultado." + RESET)
-    new_name = safe_input("Novo pacote (ex: com.exemplo.app) ou ENTER para pular: ").strip()
+    print(DIM + t("rename.intro1") + RESET)
+    print(DIM + t("rename.intro2") + RESET)
+    new_name = safe_input(t("rename.prompt")).strip()
     if not new_name:
         return
     if not valid_package_name(new_name):
-        print(RED + "Nome inválido. Use letras/números/'_' e pelo menos um ponto, ex: com.exemplo.app" + RESET)
+        print(RED + t("rename.invalid") + RESET)
         return
     result = rename_package(decoded, new_name)
     if result["ok"]:
         print(GREEN + result["message"] + RESET)
         if result["directories_moved"] or result["files_updated"]:
-            print(f" {result['directories_moved']} pasta(s) de smali movida(s), "
-                  f"{result['files_updated']} arquivo(s) atualizado(s).")
+            print(t("rename.moved", dirs=result['directories_moved'], files=result['files_updated']))
         if result.get("warning"):
             print(YELLOW + result["warning"] + RESET)
     else:
@@ -359,11 +363,11 @@ def quick_edits_menu() -> None:
     decoded = ask_decoded_dir()
     if decoded is None:
         return
-    keys = list(QUICK_EDITS)
-    print(CYAN + "\nEdições rápidas disponíveis:" + RESET)
+    keys = list(QUICK_EDIT_KEYS)
+    print(CYAN + "\n" + t("quick.title") + RESET)
     for i, k in enumerate(keys, 1):
-        print(f" [{i}] {QUICK_EDITS[k]}")
-    choice = safe_input("Números separados por vírgula (ex: 1,3), ou ENTER para pular: ").strip()
+        print(f" [{i}] {t('builder.edit.' + k)}")
+    choice = safe_input(t("quick.prompt")).strip()
     chosen = []
     for part in choice.split(","):
         part = part.strip()
@@ -372,42 +376,41 @@ def quick_edits_menu() -> None:
     if chosen:
         result = apply_quick_edits(decoded, chosen)
         if result["ok"]:
-            print(GREEN + "Aplicado: " + ", ".join(result["applied"]) + RESET)
+            print(GREEN + t("quick.applied", items=", ".join(result["applied"])) + RESET)
         else:
             print(RED + result["message"] + RESET)
     elif choice:
-        print(YELLOW + "Nenhuma edição válida selecionada." + RESET)
+        print(YELLOW + t("quick.invalid") + RESET)
 
-    if safe_input("Renomear o pacote (applicationId) também? (s/N): ").strip().lower() == "s":
+    if is_yes(safe_input(t("quick.ask_rename"))):
         prompt_rename_package(decoded)
-    print("Quando terminar de editar, use a opção 11 para reconstruir, alinhar e assinar.")
+    print(t("quick.hint"))
 
 
 def rebuild_and_sign() -> None:
-    print(CYAN + "\nReconstrução e compilação automatizada" + RESET)
-    print(YELLOW + "Use só em APKs seus ou que você tem autorização para modificar." + RESET)
-    print(DIM + "Reassinar troca a identidade do desenvolvedor original; o resultado" + RESET)
-    print(DIM + "não substitui o app da loja nem deve ser redistribuído sem permissão." + RESET)
+    print(CYAN + "\n" + t("build.title") + RESET)
+    print(YELLOW + t("build.warn1") + RESET)
+    print(DIM + t("build.warn2") + RESET)
     decoded = ask_decoded_dir()
     if decoded is None:
         return
     if not (decoded / "AndroidManifest.xml").is_file() or not (decoded / "apktool.yml").is_file():
-        print(YELLOW + "Essa pasta não parece ser uma saída do Apktool (opção 5). Confira o caminho." + RESET)
-        if safe_input("Continuar mesmo assim? (s/N): ").strip().lower() != "s":
+        print(YELLOW + t("build.not_apktool") + RESET)
+        if not is_yes(safe_input(t("build.continue"))):
             return
 
     edits: list[str] = []
-    if safe_input("Aplicar alguma edição rápida antes de compilar? (s/N): ").strip().lower() == "s":
-        keys = list(QUICK_EDITS)
+    if is_yes(safe_input(t("build.ask_quick"))):
+        keys = list(QUICK_EDIT_KEYS)
         for i, k in enumerate(keys, 1):
-            print(f" [{i}] {QUICK_EDITS[k]}")
-        choice = safe_input("Números separados por vírgula: ").strip()
+            print(f" [{i}] {t('builder.edit.' + k)}")
+        choice = safe_input(t("quick.prompt_short")).strip()
         for part in choice.split(","):
             part = part.strip()
             if part.isdigit() and 1 <= int(part) <= len(keys):
                 edits.append(keys[int(part) - 1])
 
-    if safe_input("Renomear o pacote (applicationId) antes de compilar? (s/N): ").strip().lower() == "s":
+    if is_yes(safe_input(t("build.ask_rename"))):
         prompt_rename_package(decoded)
 
     name = decoded.name.replace("_apktool", "") or "app"
@@ -418,14 +421,19 @@ def rebuild_and_sign() -> None:
 
     result = build_pipeline(decoded, work_dir, KEYSTORE, DEFAULT_ALIAS, DEFAULT_STOREPASS, edits, say)
     steps = result["steps"]
-    for name_step, label in (("quick_edits", "Edições"), ("rebuild", "Reconstrução (apktool b)"),
-                             ("align", "Alinhamento (zipalign)"), ("keystore", "Chave de assinatura"),
-                             ("sign", "Assinatura"), ("verify", "Verificação")):
-        step = steps.get(name_step)
+    for step_name, label in (("quick_edits", t("build.step.quick")),
+                             ("rebuild", t("build.step.rebuild")),
+                             ("align", t("build.step.align")),
+                             ("keystore", t("build.step.keystore")),
+                             ("sign", t("build.step.sign")),
+                             ("verify", t("build.step.verify"))):
+        step = steps.get(step_name)
         if not step:
             continue
         ok = step.get("ok")
-        mark = GREEN + "OK" + RESET if ok else (YELLOW + "pulado" + RESET if step.get("skipped") else RED + "falhou" + RESET)
+        mark = (GREEN + "OK" + RESET if ok
+                else (YELLOW + t("build.step.skipped") + RESET if step.get("skipped")
+                      else RED + t("build.step.failed") + RESET))
         print(f" [{mark}] {label}")
         if step.get("message"):
             print("      " + step["message"])
@@ -436,7 +444,7 @@ def rebuild_and_sign() -> None:
 
     if result["ok"]:
         final = Path(result["final_apk"])
-        print(GREEN + f"\nAPK pronto: {final}" + RESET)
+        print(GREEN + "\n" + t("build.ready", path=final) + RESET)
         print("SHA256:", steps.get("sha256", "?"))
         # Facilita achar no celular: também copiamos pra Downloads, se liberado.
         downloads = Path.home() / "storage" / "downloads"
@@ -444,52 +452,51 @@ def rebuild_and_sign() -> None:
             dest = downloads / "ReaDroid" / final.name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(final, dest)
-            print(GREEN + f"Cópia em: {dest}" + RESET)
-        if shutil.which("termux-open") and safe_input("Abrir o instalador do Android agora? (s/N): ").strip().lower() == "s":
+            print(GREEN + t("build.copy", path=dest) + RESET)
+        if shutil.which("termux-open") and is_yes(safe_input(t("build.ask_open"))):
             subprocess.run([shutil.which("termux-open"), str(final)], check=False)
     else:
-        print(RED + "\nA reconstrução não terminou. Veja os passos acima." + RESET)
+        print(RED + "\n" + t("build.incomplete") + RESET)
 
 
 def keystore_menu() -> None:
-    print(CYAN + "\nChave de assinatura" + RESET)
+    print(CYAN + "\n" + t("keys.title") + RESET)
     if KEYSTORE.is_file():
-        print(f" Em uso: {KEYSTORE}")
-        print(f" Alias padrão: {DEFAULT_ALIAS}")
-        print(" (a senha padrão é 'readroid123' - troque editando builder.py se quiser outra)")
-        if safe_input("Apagar esta chave e gerar outra no próximo build? (s/N): ").strip().lower() == "s":
+        print(t("keys.in_use", path=KEYSTORE))
+        print(t("keys.alias", alias=DEFAULT_ALIAS))
+        print(t("keys.default_pass"))
+        if is_yes(safe_input(t("keys.ask_delete"))):
             KEYSTORE.unlink()
-            print(GREEN + "Chave removida. Uma nova será criada na próxima reconstrução." + RESET)
+            print(GREEN + t("keys.deleted") + RESET)
     else:
-        print(" Nenhuma chave gerada ainda. Ela é criada automaticamente na primeira")
-        print(" reconstrução (opção 11) e reaproveitada nas seguintes.")
-        print(f" Local: {KEYSTORE}")
+        print(t("keys.none_yet"))
+        print(t("keys.location", path=KEYSTORE))
     if shutil.which("apksigner") and KEYSTORE.is_file():
-        print(DIM + " Dica: use a opção 11 para gerar um APK e depois 'readroid verify' nele." + RESET)
+        print(DIM + t("keys.tip") + RESET)
 
 
 # ------------------------------------------------------------------ menu
 
 MENU = [
-    ("1", "Inspecionar estrutura do APK"),
-    ("2", "Analisar manifesto e permissões"),
-    ("3", "Buscar URLs, domínios e IPs"),
-    ("4", "Decompilar para Java com JADX"),
-    ("5", "Extrair smali e recursos com Apktool"),
-    ("6", "Verificar dependências"),
-    ("7", "Abrir pasta de relatórios"),
-    ("8", "Abrir pasta de resultados"),
-    ("9", "Explorar e abrir arquivos gerados"),
-    ("10", "Edições rápidas e renomear pacote (pré-build)"),
-    ("11", "Reconstruir, alinhar e assinar APK"),
-    ("12", "Gerenciar chave de assinatura"),
+    ("1", "menu.inspect"),
+    ("2", "menu.manifest"),
+    ("3", "menu.strings"),
+    ("4", "menu.jadx"),
+    ("5", "menu.apktool"),
+    ("6", "menu.deps"),
+    ("7", "menu.reports_dir"),
+    ("8", "menu.output_dir"),
+    ("9", "menu.explore"),
+    ("10", "menu.quick"),
+    ("11", "menu.build"),
+    ("12", "menu.keystore"),
 ]
 
 
 def print_menu() -> None:
     for key, label in MENU:
-        print(f" [{key}] {label}")
-    print(" [0] Sair")
+        print(f" [{key}] {t(label)}")
+    print(t("menu.exit"))
 
 
 def main() -> None:
@@ -502,20 +509,20 @@ def main() -> None:
         choice = safe_input(CYAN + "\nReaDroid > " + RESET).strip()
 
         if choice == "1":
-            run_action("Inspeção APK", inspect_apk)
+            run_action("inspection", inspect_apk)
         elif choice == "2":
-            run_action("Manifesto", lambda apk: analyze_manifest(apk, OUTPUTS / (apk.stem + "_manifest_work")))
+            run_action("manifest", lambda apk: analyze_manifest(apk, OUTPUTS / (apk.stem + "_manifest_work")))
         elif choice == "3":
-            run_action("Scanner strings", scan_strings)
+            run_action("strings", scan_strings)
         elif choice == "4":
             apk = ask_apk()
             if apk:
                 target = OUTPUTS / (apk.stem + "_jadx")
-                print(YELLOW + "A decompilação pode demorar e consumir RAM. Use APKs confiáveis e que você tem autorização para analisar." + RESET)
-                if safe_input(f"Salvar em {target}? [s/N]: ").strip().lower() == "s":
+                print(YELLOW + t("jadx.warn") + RESET)
+                if is_yes(safe_input(t("ui.save_at", target=target))):
                     result = decompile_with_jadx(apk, target)
-                    print((GREEN if result.get("ok") else YELLOW) + result.get("message", "Processo concluído.") + RESET)
-                    print("Destino:", result.get("output_dir", target))
+                    print((GREEN if result.get("ok") else YELLOW) + result.get("message", t("ui.done")) + RESET)
+                    print(t("ui.dest", path=result.get("output_dir", target)))
                     if result.get("stderr"):
                         print(sanitize(result["stderr"][-2500:]))
                     save_and_show(result, "jadx", apk)
@@ -523,16 +530,16 @@ def main() -> None:
             apk = ask_apk()
             if apk:
                 target = OUTPUTS / (apk.stem + "_apktool")
-                print(YELLOW + "A extração pode levar alguns minutos. O APK original não será alterado." + RESET)
-                if safe_input(f"Salvar em {target}? [s/N]: ").strip().lower() == "s":
+                print(YELLOW + t("apktool.warn") + RESET)
+                if is_yes(safe_input(t("ui.save_at", target=target))):
                     result = extract_smali_with_apktool(apk, target)
-                    print((GREEN if result.get("ok") else YELLOW) + result.get("message", "Processo concluído.") + RESET)
-                    print("Destino:", result.get("output_dir", target))
+                    print((GREEN if result.get("ok") else YELLOW) + result.get("message", t("ui.done")) + RESET)
+                    print(t("ui.dest", path=result.get("output_dir", target)))
                     if result.get("stderr"):
                         print(sanitize(result["stderr"][-2500:]))
                     save_and_show(result, "apktool", apk)
                     if result.get("ok"):
-                        print(DIM + "Edite os arquivos dentro dessa pasta e depois use as opções 10/11." + RESET)
+                        print(DIM + t("apktool.edit_hint") + RESET)
         elif choice == "6":
             dependencies()
         elif choice == "7":
@@ -548,9 +555,9 @@ def main() -> None:
         elif choice == "12":
             keystore_menu()
         elif choice in ("0", ""):
-            print(GREEN + "Até a próxima. ReaDroid encerrado." + RESET)
+            print(GREEN + t("ui.bye") + RESET)
             break
         else:
-            print(YELLOW + "Opção não reconhecida." + RESET)
+            print(YELLOW + t("ui.unknown_option") + RESET)
         if choice != "0":
             pause()

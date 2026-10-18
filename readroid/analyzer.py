@@ -14,6 +14,7 @@ from typing import Any
 import xml.etree.ElementTree as ET
 
 from . import __version__, axml
+from .i18n import t
 
 MAX_ENTRY_BYTES = 64 * 1024 * 1024
 MAX_TOTAL_SCAN_BYTES = 256 * 1024 * 1024
@@ -55,9 +56,9 @@ def _run(command: list[str], timeout: int = 180) -> dict[str, Any]:
                 "stdout": result.stdout[-20000:],
                 "stderr": result.stderr[-20000:]}
     except FileNotFoundError:
-        return {"returncode": None, "stdout": "", "stderr": "Ferramenta não encontrada."}
+        return {"returncode": None, "stdout": "", "stderr": t("analyzer.err.tool_missing")}
     except subprocess.TimeoutExpired:
-        return {"returncode": None, "stdout": "", "stderr": f"Tempo limite ({timeout}s) excedido."}
+        return {"returncode": None, "stdout": "", "stderr": t("analyzer.err.timeout", seconds=timeout)}
     except OSError as exc:
         return {"returncode": None, "stdout": "", "stderr": str(exc)}
 
@@ -69,16 +70,16 @@ KNOWN_APK_EXTENSIONS = (".apk", ".apks", ".xapk", ".apk.1")
 
 def validate_apk(path: Path) -> None:
     if not path.exists() or not path.is_file():
-        raise ValueError("O caminho não aponta para um arquivo existente.")
+        raise ValueError(t("analyzer.err.path_not_file"))
     if path.stat().st_size == 0:
-        raise ValueError("O arquivo está vazio.")
+        raise ValueError(t("analyzer.err.empty"))
     if not zipfile.is_zipfile(path):
-        raise ValueError("O arquivo não parece ser um APK/ZIP válido (não é um ZIP).")
+        raise ValueError(t("analyzer.err.not_zip"))
 
 
 def extension_warning(path: Path) -> str | None:
     if path.suffix.lower() not in KNOWN_APK_EXTENSIONS:
-        return f"Extensão incomum para APK ({path.suffix or 'sem extensão'}); analisando pelo conteúdo mesmo assim."
+        return t("analyzer.warn.extension", ext=path.suffix or t("analyzer.no_extension"))
     return None
 
 
@@ -92,13 +93,14 @@ def inspect_apk(path: Path) -> dict[str, Any]:
         resource_count = sum(name.startswith("res/") for name in names)
         asset_count = sum(name.startswith("assets/") for name in names)
         manifest_info = next((item for item in infos if item.filename == "AndroidManifest.xml"), None)
-        manifest_kind = "ausente"
+        manifest_kind = t("analyzer.manifest.absent")
         if manifest_info:
             try:
                 content = archive.read(manifest_info)
-                manifest_kind = "XML texto" if content.lstrip().startswith(b"<") else "XML binário Android (AXML)"
+                manifest_kind = (t("analyzer.manifest.text_xml") if content.lstrip().startswith(b"<")
+                                 else t("analyzer.manifest.binary_xml"))
             except (OSError, RuntimeError, zipfile.BadZipFile):
-                manifest_kind = "não foi possível ler"
+                manifest_kind = t("analyzer.manifest.unreadable")
         warning = extension_warning(path)
         return {
             "tool": "ReaDroid", "version": __version__,
@@ -110,7 +112,7 @@ def inspect_apk(path: Path) -> dict[str, Any]:
             "resource_file_count": resource_count, "asset_file_count": asset_count,
             "file_list_sample": names[:500],
             "warnings": [warning] if warning else [],
-            "note": "Inspeção estática; a presença de um arquivo não prova comportamento malicioso."
+            "note": t("analyzer.note.inspect")
         }
 
 
@@ -124,7 +126,7 @@ def _parse_manifest_xml(data: bytes) -> dict[str, Any]:
     try:
         root = ET.fromstring(data)
     except (ET.ParseError, ValueError):
-        result["reason"] = "Manifesto não é XML textual válido; tente JADX/Apktool para decodificar AXML."
+        result["reason"] = t("analyzer.reason.not_text_xml")
         return result
     result["decoded"] = True
     result["package"] = root.attrib.get("package")
@@ -164,7 +166,7 @@ def analyze_manifest(path: Path, output_dir: Path) -> dict[str, Any]:
         except KeyError:
             pass
     if manifest_data is None:
-        raise ValueError("AndroidManifest.xml não foi encontrado dentro do APK.")
+        raise ValueError(t("analyzer.err.manifest_absent"))
 
     parsed: dict[str, Any]
     if _looks_like_text_xml(manifest_data):
@@ -176,10 +178,10 @@ def analyze_manifest(path: Path, output_dir: Path) -> dict[str, Any]:
         try:
             events = axml.parse_events(manifest_data)
             parsed = axml.to_manifest_dict(events)
-            parsed["decoded_by"] = "readroid (leitor AXML nativo)"
+            parsed["decoded_by"] = t("analyzer.decoded_by.native")
         except axml.AxmlError as exc:
             parsed = {"decoded": False, "permissions": [], "components": [],
-                      "reason": f"Falha ao decodificar o AXML nativamente ({exc}); tentando ferramentas externas."}
+                      "reason": t("analyzer.reason.axml_failed", error=exc)}
 
     tools: dict[str, Any] = {}
     # JADX pode exportar o manifesto decodificado junto dos recursos. A saída é tratada como dado, não como comando.
@@ -221,7 +223,7 @@ def analyze_manifest(path: Path, output_dir: Path) -> dict[str, Any]:
     parsed["apk"] = path.name
     parsed["sha256"] = sha256_file(path)
     parsed["optional_tool_runs"] = tools
-    parsed["security_note"] = "Permissões e flags são sinais para revisão; não classificam sozinhos um app como seguro ou malicioso."
+    parsed["security_note"] = t("analyzer.note.security")
     return parsed
 
 
@@ -284,9 +286,7 @@ def scan_strings(path: Path) -> dict[str, Any]:
         "domains": sorted(found["domains"]),
         "ipv4_candidates": sorted(found["ipv4_candidates"]),
         "truncated_categories": sorted(truncated),
-        "note": "São correspondências textuais, não confirmação de conexões ou atividade maliciosa. "
-                "Domínios podem ser nomes de bibliotecas, documentação ou exemplos. Categorias em "
-                "'truncated_categories' bateram no limite de itens e podem estar incompletas."
+        "note": t("analyzer.note.scan")
     }
 
 
@@ -296,7 +296,7 @@ def decompile_with_jadx(path: Path, output_dir: Path, threads: int = 2) -> dict[
     jadx = shutil.which("jadx")
     if not jadx:
         return {"ok": False, "partial": False, "status": "failed",
-                "message": "JADX não encontrado. Instale-o pelo repositório do Termux e tente novamente."}
+                "message": t("analyzer.err.no_jadx")}
     output_dir.mkdir(parents=True, exist_ok=True)
     # Limitamos threads para reduzir a pressão sobre a RAM em celulares.
     command = [jadx, "--threads-count", str(max(1, min(threads, 4))), "-d", str(output_dir), str(path)]
@@ -310,16 +310,13 @@ def decompile_with_jadx(path: Path, output_dir: Path, threads: int = 2) -> dict[
     partial = produced_files > 0 and not complete
     if complete:
         status = "success"
-        message = f"Decompilação concluída. Arquivos gerados: {produced_files}; fontes Java: {java_count}."
+        message = t("analyzer.jadx.success", files=produced_files, java=java_count)
     elif partial:
         status = "partial"
-        message = (f"Decompilação parcial: o JADX retornou código {returncode}, mas gerou "
-                   f"{produced_files} arquivo(s), incluindo {java_count} fonte(s) Java. "
-                   "Confira os logs; alguns trechos podem estar incompletos.")
+        message = t("analyzer.jadx.partial", code=returncode, files=produced_files, java=java_count)
     else:
         status = "failed"
-        message = (f"A decompilação falhou (código de retorno: {returncode}). "
-                   "Nenhum arquivo foi encontrado na pasta de saída. Confira os logs.")
+        message = t("analyzer.jadx.failed", code=returncode)
     return {"ok": complete, "partial": partial, "status": status,
             "command": command[0:3] + ["…"], "returncode": returncode,
             "output_dir": str(output_dir), "files_generated": produced_files,
@@ -331,7 +328,7 @@ def extract_smali_with_apktool(path: Path, output_dir: Path) -> dict[str, Any]:
     validate_apk(path)
     apktool = shutil.which("apktool")
     if not apktool:
-        return {"ok": False, "message": "Apktool não encontrado. O restante do ReaDroid continua funcionando sem ele."}
+        return {"ok": False, "message": t("analyzer.err.no_apktool_soft")}
     output_dir.mkdir(parents=True, exist_ok=True)
     result = _run([apktool, "d", "-f", "-o", str(output_dir), str(path)], timeout=900)
     smali_dirs = [str(p) for p in output_dir.glob("smali*") if p.is_dir()]

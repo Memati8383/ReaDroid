@@ -148,9 +148,13 @@ def main() -> int:
     # ile sormak yanlış negatif üretiyordu.
     prefix = os.environ.get("PREFIX", "")
     is_termux = prefix.startswith("/data/data/com.termux") or bool(shutil.which("pkg"))
-    check("ambiente Termux", is_termux, prefix or "PREFIX vazio")
-    if not is_termux:
-        notes.append("fora do Termux - verificacao das ferramentas foi parcial")
+    if is_termux:
+        check("ambiente Termux", True, prefix)
+    else:
+        # Não é falha: o autoteste também roda no CI e na máquina de quem
+        # desenvolve no Windows/macOS. Só a checagem das ferramentas fica parcial.
+        print(f"[INFO] fora do Termux (PREFIX={prefix or 'vazio'}) - ferramentas checadas parcialmente")
+        notes.append("fora do Termux: aapt2/zipalign/apksigner podem nao estar no PATH")
 
     # --- aapt2 é o elo frágil do Termux ------------------------------
     # O pacote aapt2 do Termux às vezes vem linkado contra um libprotobuf mais

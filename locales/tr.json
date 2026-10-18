@@ -122,7 +122,7 @@
   "menu.reports_dir": "Raporlar klasörünü aç",
   "menu.output_dir": "Sonuçlar klasörünü aç",
   "menu.explore": "Üretilen dosyalara göz at ve aç",
-  "menu.quick": "Hızlı düzenlemeler ve paket adlandırma (derleme öncesi)",
+  "menu.quick": "Hızlı düzenlemeler ve paket adlandırma",
   "menu.build": "APK'yı yeniden derle, hizala ve imzala",
   "menu.keystore": "İmzalama anahtarını yönet",
   "menu.exit": " [0] Çıkış",

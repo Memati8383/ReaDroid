@@ -122,7 +122,7 @@
   "menu.reports_dir": "Abrir pasta de relatórios",
   "menu.output_dir": "Abrir pasta de resultados",
   "menu.explore": "Explorar e abrir arquivos gerados",
-  "menu.quick": "Edições rápidas e renomear pacote (pré-build)",
+  "menu.quick": "Edições rápidas e renomear pacote",
   "menu.build": "Reconstruir, alinhar e assinar APK",
   "menu.keystore": "Gerenciar chave de assinatura",
   "menu.exit": " [0] Sair",

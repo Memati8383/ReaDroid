@@ -43,7 +43,7 @@
 - Depo URL'si placeholder olarak kaldıysa ve yerel checkout yoksa, betik ne yapılması
   gerektiğini söyleyip duruyor (sessizce yanlış yere klonlamıyor).
 - **`tools/set_repo.py`** placeholder'ı tek komutla dolduruyor: `install.sh`, `README.md`,
-  `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` içindeki `<KULLANICI-ADIN>` ve ham
+  `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` içindeki `Memati8383` ve ham
   `raw.githubusercontent.com` adreslerini tek seferde güncelliyor. `--check` modu boş çıktı
   verir, CI da bunu adım olarak çalıştırıyor.
 - **`tools/selfcheck.py`** kurulum sonrası otomatik çalışıyor: Python sürümü, import,

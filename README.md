@@ -2,7 +2,7 @@
 
 **Android Tersine Mühendislik Araç Kutusu** — Android 12–16 için statik APK analizi ve yeniden derleme. Termux üzerinde root'suz ve yapay zekâsız çalışmak için tasarlandı.
 
-> Bu depo, [Memati8383/ReaDroid](https://github.com/Memati8383/ReaDroid) projesinin **Türkçe çevirisidir**. Kod, çekirdek mantık ve araç zinciri orijinaline aittir; bu çalışma yalnızca arayüz metinlerini ve belgeleri Türkçeleştirir.
+> Bu depo, [Mcsd7/ReaDroid](https://github.com/Mcsd7/ReaDroid) projesinin **Türkçe çevirisidir**. Orijinal kod, çekirdek mantık ve araç zinciri Mcsd7'ye aittir; bu çalışma yalnızca arayüz metinlerini, otomatik testleri ve belgeleri Türkçeleştirir.
 
 ## Dil seçimi
 
@@ -78,13 +78,13 @@ Termux'u açıp şu tek satırı yapıştırın — klonlar, paketleri kurar, ot
 çalıştırır ve size ne yapacağınızı söyler:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/<KULLANICI-ADIN>/ReaDroid-TR/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Memati8383/ReaDroid/main/install.sh)"
 ```
 
 İlk seferde onay ister (`[e/H]`). Onaylamadan kurmak için:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/<KULLANICI-ADIN>/ReaDroid-TR/main/install.sh)" -- -y
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Memati8383/ReaDroid/main/install.sh)" -- -y
 ```
 
 Farklı klasöre kurmak, paket kurmadan çalıştırmak, başka kaynak kullanmak veya sadece test etmek:
@@ -121,7 +121,7 @@ ReaDroid üçüncü taraf çalıştırılabilir dosyalarını kendiliğinden ind
 Depoyu elle kopyalayın:
 
 ```bash
-git clone https://github.com/<KULLANICI-ADIN>/ReaDroid-TR.git
+git clone https://github.com/Memati8383/ReaDroid
 cd ReaDroid-TR
 bash install.sh --check     # kurmadan önce doğrula
 python readroid.py
@@ -269,8 +269,9 @@ MIT. `LICENSE` dosyasına bakın.
 ## Krediler
 
 ReaDroid, isteğe bağlı üçüncü taraf araçları bütünleştiren özgün bir arayüz/otomasyondur. Orijinal
-proje [Memati8383/ReaDroid](https://github.com/Memati8383/ReaDroid) — telif hakkı OffensiveTec'e
-aittir. JADX, Apktool ve apksigner kendi projeleri, lisansları ve koşullarıyla ayrıdır:
+proje [Mcsd7/ReaDroid](https://github.com/Mcsd7/ReaDroid) — telif hakkı OffensiveTec'e
+aittir. Bu depo, o projenin `Memati8383` hesabındaki fork'udur; Türkçe çeviri, `tools/` betikleri
+ve tek komut kurulum bu fork'a özeldir. JADX, Apktool ve apksigner kendi projeleri, lisansları ve koşullarıyla ayrıdır:
 
 - JADX: https://github.com/skylot/jadx
 - Apktool: https://github.com/iBotPeaches/Apktool

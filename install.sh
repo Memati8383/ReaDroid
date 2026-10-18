@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ReaDroid - instalador (uma linha só, no Termux)
 #
-#   bash -c "$(curl -fsSL https://raw.githubusercontent.com/<KULLANICI-ADIN>/ReaDroid-TR/main/install.sh)"
+#   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Memati8383/ReaDroid/main/install.sh)"
 #
 # O script é idempotente: rodar de novo atualiza em vez de reinstalar.
 # Funciona tanto copiado para um checkout já baixado quanto via curl | bash,
@@ -9,7 +9,7 @@
 
 set -eu
 
-REPO_URL="${READROID_REPO:-https://github.com/<KULLANICI-ADIN>/ReaDroid-TR.git}"
+REPO_URL="${READROID_REPO:-https://github.com/Memati8383/ReaDroid.git}"
 REPO_DIR="${READROID_DIR:-$HOME/ReaDroid}"
 BRANCH="${READROID_BRANCH:-main}"
 ASSUME_YES=0
@@ -122,8 +122,8 @@ ensure_repo() {
     *'<'*|*'>'*)
       say "A URL do repositório ainda tem o placeholder." "A URL do repositório ainda tem o placeholder."
       say "Defina READROID_REPO e rode de novo:" "Defina READROID_REPO e rode de novo:"
-      say "  READROID_REPO=https://github.com/SEU_USUARIO/ReaDroid-TR.git bash install.sh" \
-          "  READROID_REPO=https://github.com/SEU_USUARIO/ReaDroid-TR.git bash install.sh"
+      say "  READROID_REPO=https://github.com/Memati8383/ReaDroid bash install.sh" \
+          "  READROID_REPO=https://github.com/Memati8383/ReaDroid bash install.sh"
       return 1
       ;;
   esac

@@ -5,9 +5,21 @@ on:
 jobs:
   python-tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # A suíte é bilíngue: test_analyzer fixa o português para as asserções de
+        # texto, test_i18n troca o idioma de propósito. Rodar as duas matrizes
+        # pega catálogo faltando chave antes do merge.
+        lang: [tr, pt]
+    env:
+      READROID_LANG: ${{ matrix.lang }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m unittest discover -s tests -v
+      - name: Testes
+        run: python -m unittest discover -s tests -v
+      - name: Lint de textos não traduzidos
+        run: python tools/extract_strings.py --stats

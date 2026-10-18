@@ -28,6 +28,8 @@ Termux üzerinde root'suz, çevrimdışı ve yapay zekâsız çalışır.
 > Orijinal kod, çekirdek mantık ve araç zinciri Mcsd7'ye aittir (MIT, telif OffensiveTec).
 > Bu fork'a özgü olan: arayüz çevirisi, otomatik testler, tek komut kurulum ve Türkçe belgeler.
 
+**Diller:** 🇹🇷 [Türkçe](README.md) · 🇬🇧 [English](README.en.md) · 🇵🇹 [Português (upstream)](README.pt.md)
+
 ---
 
 ## Tek komut

@@ -21,5 +21,9 @@ jobs:
           python-version: '3.12'
       - name: Testes
         run: python -m unittest discover -s tests -v
+      - name: Autoteste
+        run: python tools/selfcheck.py
       - name: Lint de textos não traduzidos
         run: python tools/extract_strings.py --stats
+      - name: Nenhum placeholder de repositório
+        run: python tools/set_repo.py --check

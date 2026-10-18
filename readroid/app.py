@@ -44,18 +44,29 @@ def width() -> int:
     return max(32, min(shutil.get_terminal_size((44, 24)).columns, 78))
 
 
+def _fit(text: str, size: int) -> str:
+    """Corta com reticências para caber na caixa. O texto traduzido pode ser mais
+    largo que o terminal - no celular isso é a norma, não a exceção."""
+    if len(text) <= size:
+        return text
+    return text[:max(size - 1, 0)] + "…"
+
+
 def banner() -> None:
     clear()
-    title = f" ReaDroid v{__version__}"
-    subtitle = t("banner.subtitle")
+    avail = width() - 2
+    title = _fit(f" ReaDroid v{__version__}", avail)
+    subtitle = _fit(t("banner.subtitle"), avail)
     # A caixa nasce do conteúdo, não de um número fixo: o texto traduzido pode ser
     # mais largo que o original e estourar a borda num terminal estreito.
-    inner = min(max(len(title), len(subtitle)) + 2, width() - 2)
+    inner = min(max(len(title), len(subtitle)) + 2, avail)
+    watermark = _fit(t("banner.watermark"), avail)
+    offset = max(min(inner - 12, width() - len(watermark) - 1), 0)
     print(GREEN + "╭" + "─" * inner + "╮" + RESET)
     print(GREEN + "│" + RESET + BOLD + title.ljust(inner) + RESET + GREEN + "│" + RESET)
     print(GREEN + "│" + RESET + CYAN + subtitle.ljust(inner) + RESET + GREEN + "│" + RESET)
     print(GREEN + "╰" + "─" * inner + "╯" + RESET)
-    print((" " * max(inner - 12, 0)) + DIM + t("banner.watermark") + RESET)
+    print((" " * offset) + DIM + watermark + RESET)
 
 
 def safe_input(prompt: str = "") -> str:
@@ -126,8 +137,16 @@ def ask_apk() -> Path | None:
 def ask_decoded_dir() -> Path | None:
     """Lista pastas já decodificadas pelo Apktool (opção 5) e deixa escolher ou digitar outra."""
     OUTPUTS.mkdir(parents=True, exist_ok=True)
+    # stat() dentro do sort pode explodir se a pasta sumir no meio da listagem
+    # (o usuário apaga output/ enquanto o menu está aberto). O menu não fecha por isso.
+    def mtime(item: Path) -> float:
+        try:
+            return item.stat().st_mtime
+        except OSError:
+            return 0.0
+
     candidates = sorted((p for p in OUTPUTS.glob("*_apktool") if p.is_dir()),
-                        key=lambda p: p.stat().st_mtime, reverse=True)[:15]
+                        key=mtime, reverse=True)[:15]
     if candidates:
         print(CYAN + t("dir.decoded_found") + RESET)
         for index, item in enumerate(candidates, 1):
@@ -190,7 +209,10 @@ def run_action(key: str, action: Callable[[Path], dict]) -> None:
 
 def dependencies() -> None:
     print(CYAN + "\n" + t("deps.title") + RESET)
-    for name in ("python", "java", "jadx", "apktool", "aapt", "aapt2", "zipalign", "apksigner", "keytool", "unzip", "git"):
+    # less e termux-open entram na lista porque o explorador de arquivos depende
+    # deles (o less é opcional: sem ele o paginador próprio assume).
+    for name in ("python", "java", "jadx", "apktool", "aapt", "aapt2", "zipalign",
+                 "apksigner", "jarsigner", "keytool", "unzip", "less", "termux-open", "git"):
         path = shutil.which(name)
         print(f"[{GREEN + 'OK' + RESET if path else YELLOW + '--' + RESET}] {name}: {path or t('deps.not_found')}")
     if shutil.which("java"):

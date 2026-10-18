@@ -68,7 +68,41 @@ bilinen resmî uyumsuzlukları var; bu yüzden özellik isteğe bağlıdır ve c
 
 ## Termux'a kurulum
 
-Paketleri güncelleyin:
+### Tek komut
+
+Termux'u açıp şu tek satırı yapıştırın — klonlar, paketleri kurar, otomatik testi
+çalıştırır ve size ne yapacağınızı söyler:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/<KULLANICI-ADIN>/ReaDroid-TR/main/install.sh)"
+```
+
+İlk seferde onay ister (`[e/H]`). Onaylamadan kurmak için:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/<KULLANICI-ADIN>/ReaDroid-TR/main/install.sh)" -- -y
+```
+
+Farklı klasöre kurmak, paket kurmadan çalıştırmak, başka kaynak kullanmak veya sadece test etmek:
+
+```bash
+bash install.sh --dir ~/ReaDroid                          # farklı klasör
+bash install.sh --check                                  # sadece otomatik test, hiçbir şey kurmaz
+bash install.sh --repo https://github.com/KULLANICI/ReaDroid-TR.git   # başka kaynak
+bash install.sh --lang pt                                # Portekizce mesajlar
+```
+
+`install.sh` **idempotenttir**: tekrar çalıştırmak yeniden kurmaz, `origin/main`'den günceller.
+Yerelde yaptığınız değişiklikler varsa üstüne yazılmaz, uyarı verir.
+
+Kurulumdan sonra:
+
+```bash
+cd ~/ReaDroid
+python readroid.py
+```
+
+### Elle kurulum
 
 ```bash
 pkg update && pkg upgrade
@@ -80,15 +114,16 @@ pkg install apksigner   # isteğe bağlı ama önerilir - aşağıdaki "Yeniden 
 yapılandırılmış depoda yoksa, bulunan paketleri kurun ve Termux'in resmî dokümantasyonuna başvurun.
 ReaDroid üçüncü taraf çalıştırılabilir dosyalarını kendiliğinden indirmez.
 
-Depoyu kopyalayın:
+Depoyu elle kopyalayın:
 
 ```bash
 git clone https://github.com/<KULLANICI-ADIN>/ReaDroid-TR.git
 cd ReaDroid-TR
+bash install.sh --check     # kurmadan önce doğrula
 python readroid.py
 ```
 
-Dosyaları zaten indirdiyseniz `bash install.sh` ve ardından `python readroid.py` çalıştırın.
+Dosyaları ZIP olarak indirdiyseniz aynı şekilde: klasörün içinde `bash install.sh`.
 
 Download klasöründen APK seçebilmek için Termux istediğinde depolama iznini verin:
 
@@ -97,6 +132,22 @@ termux-setup-storage
 ```
 
 Örnek yol: `~/storage/shared/Download/uygulama.apk`.
+
+### Terminal genişliği
+
+Menü çerçevesi terminalin genişliğine göre kendini ayarlar; 32 kolonluk dar ekranda bile taşmaz.
+Yine de ReaDroid'ı `tmux` veya `screen` içinde çalıştırmak en rahat deneyimdir.
+
+### Otomatik test
+
+Kurulumdan sonra, ya da istediğiniz zaman eksik olanı görmek için:
+
+```bash
+python tools/selfcheck.py
+```
+
+İmporter, katalog bütünlüğü, 32/40/50/72 kolonluk çerçeve sığması, sahte bir APK üzerinde
+analiz ve JSON rapor yazımı kontrol edilir; harici araçlardan hangisinin bulunduğunu listeler.
 
 ## Nasıl kullanılır
 

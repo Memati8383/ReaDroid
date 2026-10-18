@@ -28,6 +28,42 @@
   `LANG=tr` bir terminalde de yeşil.
 - Dokümanlar Türkçeleştirildi. Orijinal Portekizce README `README.pt.md` olarak duruyor.
 
+### Tek komut kurulum
+- **`install.sh` artık tek başına her şeyi kuruyor.** Tek satır:
+  `bash -c "$(curl -fsSL https://raw.githubusercontent.com/.../install.sh)"`.
+  Klonlar (veya mevcut checkout'u bulur), `pkg` ile paketleri kurar, otomatik testi
+  çalıştırır ve sonraki adımları yazdırır.
+- **İdempotent.** Tekrar çalıştırmak yeniden kurmaz; `origin/main`'den `merge --ff-only` dener.
+  Yerelde değişiklik varsa üstüne yazmaz, uyarır ve devam eder.
+- **Argümanlar:** `-y/--yes`, `--dir`, `--repo`, `--branch`, `--lang tr|pt`, `--no-deps`, `--check`.
+  Ortam değişkenleri: `READROID_REPO`, `READROID_DIR`, `READROID_BRANCH`, `READROID_LANG`.
+- `curl | bash` ile çalıştırıldığında `$0` bir dosya olmadığı için betik kendi konumunu
+  `$HOME/ReaDroid` olarak varsayıyor; ZIP ile indirilip klasör içinden çalıştırıldığında
+  bulunduğu klasörü kullanıyor.
+- Depo URL'si placeholder olarak kaldıysa ve yerel checkout yoksa, betik ne yapılması
+  gerektiğini söyleyip duruyor (sessizce yanlış yere klonlamıyor).
+- **`tools/set_repo.py`** placeholder'ı tek komutla dolduruyor: `install.sh`, `README.md`,
+  `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` içindeki `<KULLANICI-ADIN>` ve ham
+  `raw.githubusercontent.com` adreslerini tek seferde güncelliyor. `--check` modu boş çıktı
+  verir, CI da bunu adım olarak çalıştırıyor.
+- **`tools/selfcheck.py`** kurulum sonrası otomatik çalışıyor: Python sürümü, import,
+  iki katalogun bütünlüğü, kodda kullanılan anahtarların varlığı, banner'ın 32/40/50/72
+  kolonda sığması, sahte APK üzerinde analiz ve JSON rapor yazımı, harici araç listesi.
+  Çıkış kodu CI'a gider.
+
+### Düzeltilen hatalar
+- **Banner dar terminalde taşıyordu.** Kutu sabit 42 karakterden geliyordu; Türkçe alt
+  başlık 41 karakter, terminaller 32–40 kolona inince sağ kenar bozuluyordu. Artık kutu
+  içeriğin genişliğinden ölçülüyor ve sığmayan metin `…` ile kırpılıyor. `tools/selfcheck.py`
+  bu koşulu dört genişlikte test ediyor.
+- **`ask_decoded_dir()` çökebiliyordu.** `stat()` sıralama anahtarı içindeydi; menü açıkken
+  `output/` silinirse `FileNotFoundError` traceback basıyordu. Artık `OSError` yutuluyor.
+- **Kod dışı bir kod sayfasında UnicodeEncodeError.** `readroid.py` ve `python -m readroid`
+  artık çıktı akışını UTF-8'e zorluyor (`errors="replace"`); `tools/` betikleri de aynı
+  korumayı alıyor.
+- Bağımlılık listesine `jarsigner`, `less` ve `termux-open` eklendi — gezgin bunları
+  fiilen kullanıyor, ama listede yoktu.
+
 ### Bilinen sınırlar
 - Statik analiz ve yeniden derleme akışının tamamı cihazda doğrulanmadı; çeviri katmanı masaüstünde
   iki dilde test edildi, `apktool`/`zipalign`/`apksigner` zinciri Termux'ta denenmeli.

@@ -47,8 +47,8 @@ sildiği için [code]README.pt.md[/code] artık o orijinalin tek kopyası.
 betiğinin tamamı — hepsi Türkçe. İsteyen Portekizceye dönebilir:
 [code][READROID_LANG=pt python readroid.py][/code]
 
-[b][color=#2ECC71]+[/color] [e/H] soruları da çalışıyor.[/b] Orijinal betik [code][s/N][/code] diye
-soruyordu; Türkçe "evet" için [e] yazdığında "hayır" sayıyordu. Artık ikisini de kabul ediyor.
+[b][color=#2ECC71]+[/color] [code][e/H][/code] soruları da çalışıyor.[/b] Orijinal betik [code][s/N][/code] diye
+soruyordu; Türkçe "evet" için [code]e[/code] yazdığında "hayır" sayıyordu. Artık ikisini de kabul ediyor.
 
 [b][color=#2ECC71]+[/color] Tek komut kurulum.[/b] Aşağıdaki tek satır depoyu indiriyor,
 gereken paketleri kuruyor, kendini test ediyor ve ne yapman gerektiğini söylüyor.

@@ -255,7 +255,30 @@ class BuilderTests(unittest.TestCase):
             self.assertTrue(result["ok"], result["steps"])
             self.assertTrue(Path(result["final_apk"]).is_file())
             self.assertIn('android:debuggable="true"', (decoded / "AndroidManifest.xml").read_text())
-            self.assertEqual(result["steps"]["sign"]["scheme"], "v1 + v2 + v3")
+            self.assertTrue(result["steps"]["sign"]["ok"])
+            # O esquema não é mais declarado: sai do "apksigner verify" de verdade.
+            self.assertNotIn("scheme", result["steps"]["sign"])
+            self.assertIn("schemes", result["steps"]["verify"])
+
+    def test_verify_reports_only_the_schemes_apksigner_actually_applied(self):
+        """"v1 + v2 + v3" no relatório era mentira: o apksigner só marca v1
+        quando o minSdk do APK pede. O passo verify agora lê a resposta real."""
+        sample = ("Verifies\n"
+                  "Verified using v1 scheme (JAR signing): false\n"
+                  "Verified using v2 scheme (APK Signature Scheme v2): true\n"
+                  "Verified using v3 scheme (APK Signature Scheme v3): true\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "app.apk"
+            apk.write_bytes(b"PK\x03\x04")
+
+            def fake_run(cmd, timeout=180):
+                return {"returncode": 0, "stdout": sample, "stderr": ""}
+
+            with patch("readroid.builder.shutil.which", return_value="/usr/bin/apksigner"), \
+                 patch("readroid.builder._run", side_effect=fake_run):
+                result = builder.verify_apk(apk)
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["schemes"], ["v2", "v3"])
 
     def test_rename_package_moves_smali_and_updates_references(self):
         with tempfile.TemporaryDirectory() as tmp:

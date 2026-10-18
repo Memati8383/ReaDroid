@@ -151,6 +151,7 @@
   "builder.sign.v1_warning": "Sem apksigner, só a assinatura v1 (JAR) foi aplicada. Apps com targetSdkVersion 24+ podem ser recusados pelo instalador do Android 7+. Para assinatura completa: pkg install apksigner",
   "builder.err.no_signer": "Nem apksigner nem jarsigner encontrados. Instale: pkg install apksigner  (ou openjdk-21 para o jarsigner).",
   "builder.err.no_apksigner_verify": "apksigner não encontrado; verificação automática pulada.",
+  "builder.verify.schemes": "Esquemas de assinatura confirmados: {schemes}",
   "builder.say.quick_edits": "aplicando edições rápidas no manifesto",
   "builder.say.rebuild": "reconstruindo o APK (apktool b)",
   "builder.say.align": "alinhando (zipalign)",

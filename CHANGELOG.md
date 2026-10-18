@@ -64,6 +64,30 @@
 - Bağımlılık listesine `jarsigner`, `less` ve `termux-open` eklendi — gezgin bunları
   fiilen kullanıyor, ama listede yoktu.
 
+### Cihazda doğrulama (Android 16 / SDK 36 / arm64-v8a, Termux, Python 3.14.6)
+Tam zincir gerçek bir cihazda çalıştırıldı: probe APK üretimi → 1/2/3 → 5 → 10 → 11 → 12 →
+`apksigner verify`. Yeniden derlenen APK, taşınan paket adını (`com.sondurum.probe`) ve izni
+kendi içinde korudu. Bu turda çıkan üç gerçek hata:
+
+- **Varsayılan dil hiç devreye girmiyordu.** `detect()` `LANG`'e bakıp `tr` değilse `pt`
+  döndürüyordu. Termux'ta `LANG` Android varsayılanı olarak `en_US.UTF-8` geldiği için Türkçe
+  kullanıcı, `READROID_LANG=tr` yazmadıkça **Portekizce** görüyordu. Artık `LANG=en_US.UTF-8`
+  Türkçe açar; Portekizce için açıkça `READROID_LANG=pt` gerekir. Regresyon testi eklendi.
+- **İmza şeması uyduruluyordu.** `sign_apk` her `apksigner` imzası için `"v1 + v2 + v3"`
+  yazıyordu; cihazdaki doğrulama `v1: false, v2: true, v3: true` gösterdi — `apksigner` v1'i
+  ancak APK'nın minSdk'sı istediğinde uyguluyor. Artık şema beyan edilmiyor, `verify_apk`
+  `apksigner verify --verbose` çıktısını ayrıştırıp **gerçekten uygulanan** şemaları raporluyor.
+- **`tools/selfcheck.py` Termux'u yanlış algılıyordu.** `pkg --version` Termux'ta geçerli bir
+  komut değil (`Unknown command`) ve hep 1 dönüyordu, yani otomatik test her cihazda hata
+  veriyordu. Algılama artık `PREFIX` ve `pkg` varlığına bakıyor.
+
+### Cihazda bulunan, ReaDroid'a ait olmayan kırılma
+Termux'un `aapt2 16.0.0.4-3` paketi, kurulu `libprotobuf 2:35.1` ile uyumsuzdu
+(`cannot locate symbol ...google8protobuf8internal8TcParser15MpUnknownFields`); `aapt2 version`
+bile çalışmıyordu. apktool 3 kaynak derlemek için `aapt2`'yi çağırdığı için **menü 11 tamamen
+ölüydü**. `pkg upgrade -y protobuf libprotobuf` ile düzeldi. Artık `selfcheck.py` bu kırılmayı
+yakalayıp tek komutu söylüyor ve README'ye "Sorun giderme" bölümü eklendi.
+
 ### Bilinen sınırlar
 - Statik analiz ve yeniden derleme akışının tamamı cihazda doğrulanmadı; çeviri katmanı masaüstünde
   iki dilde test edildi, `apktool`/`zipalign`/`apksigner` zinciri Termux'ta denenmeli.

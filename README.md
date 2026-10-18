@@ -6,15 +6,19 @@
 
 ## Dil seçimi
 
-Arayüz dili şu sırayla belirlenir:
+Arayüz dili **Türkçedir**; Portekizce isteyen tek yol açıkça söylemektir:
 
 ```bash
-READROID_LANG=tr python readroid.py    # Türkçe (varsayılan)
+python readroid.py                     # Türkçe (varsayılan)
+READROID_LANG=tr python readroid.py    # Türkçe (açık)
 READROID_LANG=pt python readroid.py    # Orijinal Portekizce metinler
-python readroid.py                     # LANG/LC_ALL tr ise Türkçe, değilse Portekizce
 ```
 
 Metinler `locales/tr.json` ve `locales/pt.json` içinde, anlamsal anahtarlarla tutulur. Bir metni değiştirmek için kodu değil, kataloğu düzenleyin.
+
+Sıra `READROID_LANG` > `LC_ALL` > `LC_MESSAGES` > `LANG`. Açık bir `READROID_LANG` her zaman kazanır: `tr_TR.UTF-8` olan bir makinede bile `READROID_LANG=pt` Portekizce açar.
+
+> `LANG=en_US.UTF-8` (Android'de fabrika ayarı) **Portekizce anlamına gelmez** — Türkçe açar. Bu bilinçli bir tercih: depo Türkçe konuşanlar için var, sistem dilini yanlışlıkla Portekizce'ye çevirmek istemiyoruz.
 
 ---
 
@@ -148,6 +152,34 @@ python tools/selfcheck.py
 
 İmporter, katalog bütünlüğü, 32/40/50/72 kolonluk çerçeve sığması, sahte bir APK üzerinde
 analiz ve JSON rapor yazımı kontrol edilir; harici araçlardan hangisinin bulunduğunu listeler.
+
+### Sorun giderme
+
+**11. seçenek "Building resources with aapt2" adımında kırılıyor.**
+Termux'un `aapt2` paketi bazen kurulu `libprotobuf`'dan yeni bir ABI'ye bağlanmış olur ve
+`cannot locate symbol ...TcParser15MpUnknownFields` hatası verir — `aapt2 version` bile
+çalışmaz. Bu ReaDroid'ın hatası değildir; apktool 3 kaynakları derlemek için `aapt2`'yi çağırır.
+Çözüm kütüphaneyi yükseltmektir:
+
+```bash
+pkg upgrade -y protobuf libprotobuf
+```
+
+**Menü Portekizce açıyor.**
+`READROID_LANG=pt` verilmiş demektir. `echo $READROID_LANG` ile bakın; temizlemek için
+`unset READROID_LANG`.
+
+**JADX "JAVA_HOME is not set and no 'java' command could be found" diyor.**
+Genelde `jadx` sarmalayıcısının `PATH`'i görememesinden olur. Etkileşimli bir Termux oturumunda
+çalışır, ssh/CI gibi sıfır `PATH`'li bir bağlamda çalışmaz. `pkg install openjdk-21` sonrası
+tekrar deneyin.
+
+**Download klasöründeki APK'lar listede çıkmıyor.**
+Bir kez `termux-setup-storage` çalıştırın; Android depolama izni ister.
+
+**Türkçe karakterler bozuk görünüyor.**
+`tmux`/`screen` içinde `LANG` ayarlanmamış olabilir. `locale` çıktısında UTF-8 yoksa
+`export LANG=C.UTF-8` deneyin.
 
 ## Nasıl kullanılır
 

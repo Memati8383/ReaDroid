@@ -151,6 +151,7 @@
   "builder.sign.v1_warning": "apksigner olmadan yalnızca v1 (JAR) imzası uygulandı. targetSdkVersion 24+ uygulamaları Android 7+ yükleyicisi tarafından reddedilebilir. Tam imza için: pkg install apksigner",
   "builder.err.no_signer": "Ne apksigner ne jarsigner bulundu. Kurun: pkg install apksigner  (jarsigner için openjdk-21).",
   "builder.err.no_apksigner_verify": "apksigner bulunamadı; otomatik doğrulama atlandı.",
+  "builder.verify.schemes": "Doğrulanan imza şemaları: {schemes}",
   "builder.say.quick_edits": "manifestoya hızlı düzenlemeler uygulanıyor",
   "builder.say.rebuild": "APK yeniden derleniyor (apktool b)",
   "builder.say.align": "hizalama yapılıyor (zipalign)",

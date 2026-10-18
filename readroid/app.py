@@ -461,6 +461,8 @@ def rebuild_and_sign() -> None:
             print("      " + step["message"])
         if step.get("warning"):
             print(YELLOW + "      " + step["warning"] + RESET)
+        if step.get("schemes"):
+            print("      " + t("builder.verify.schemes", schemes=", ".join(step["schemes"])))
         if not ok and step.get("stderr"):
             print(DIM + "      " + step["stderr"][-400:] + RESET)
 

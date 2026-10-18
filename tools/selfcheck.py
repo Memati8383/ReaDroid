@@ -143,11 +143,44 @@ def main() -> int:
         state = path or "ausente (opcional)"
         print(f"[INFO] {name}: {state}")
 
-    try:
-        result = subprocess.run(["pkg", "--version"], capture_output=True, text=True, timeout=10)
-        check("ambiente Termux", result.returncode == 0, "pkg disponível")
-    except (OSError, subprocess.TimeoutExpired):
-        notes.append("fora do Termux (sem pkg) - verificação das dependências foi parcial")
+    # Termux tespiti: PREFIX'e bakmak en iyisi. "pkg --version" Termux'ta
+    # geçerli bir komut değil (Unknown command) ve hep 1 döner - subprocess
+    # ile sormak yanlış negatif üretiyordu.
+    prefix = os.environ.get("PREFIX", "")
+    is_termux = prefix.startswith("/data/data/com.termux") or bool(shutil.which("pkg"))
+    check("ambiente Termux", is_termux, prefix or "PREFIX vazio")
+    if not is_termux:
+        notes.append("fora do Termux - verificacao das ferramentas foi parcial")
+
+    # --- aapt2 é o elo frágil do Termux ------------------------------
+    # O pacote aapt2 do Termux às vezes vem linkado contra um libprotobuf mais
+    # novo que o instalado: "cannot locate symbol ...TcParser15MpUnknownFields".
+    # O apktool 3 chama o aapt2 para compilar recursos, então isso derrubava o
+    # menu 11 inteiro - e a falha não é do ReaDroid. Quando ela aparece, o conserto
+    # é subir a biblioteca, não reinstalar ferramenta nenhuma.
+    aapt2 = shutil.which("aapt2")
+    if aapt2:
+        try:
+            probe = subprocess.run([aapt2, "version"], capture_output=True, text=True, timeout=30)
+            combined = (probe.stdout + probe.stderr).strip()
+            if "cannot locate symbol" in combined.lower():
+                print("[FALHA] aapt2 quebrado no Termux -> rode: pkg upgrade -y protobuf libprotobuf")
+                problems.append("aapt2")
+            else:
+                check("aapt2 responde", True, combined.splitlines()[0] if combined else "?")
+        except (OSError, subprocess.TimeoutExpired):
+            print("[INFO] aapt2 nao respondeu (pode estar ok; o apktool 3 chama ele no build)")
+
+    for name, args in (("zipalign", []), ("apksigner", ["version"])):
+        tool = shutil.which(name)
+        if not tool:
+            continue
+        try:
+            probe = subprocess.run([tool, *args], capture_output=True, text=True, timeout=30)
+            text_out = (probe.stdout + probe.stderr).strip().splitlines()
+            check(f"{name} responde", True, text_out[0] if text_out else "?")
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            check(f"{name} responde", False, repr(exc))
 
     # --- escreve e lê um relatório de verdade -------------------------------
     if notes:

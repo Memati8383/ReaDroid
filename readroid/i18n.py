@@ -37,8 +37,12 @@ def _is_tr(value: str) -> bool:
 def detect() -> str:
     """READROID_LANG > LC_ALL > LC_MESSAGES > LANG > DEFAULT_LANG.
 
-    Um valor explícito sempre vence: READROID_LANG=pt tem que dar português,
-    mesmo numa máquina turca. Sem nenhum deles, o fork usa o próprio idioma.
+    Um valor explícito sempre vence: READROID_LANG=pt tem que dar português
+    mesmo numa máquina turca. Fora disso, este fork é bilíngue e o padrão é o
+    CATÁLOGO TURCO - não o fallback. Um LANG=en_US.UTF-8 numa tela de celular
+    é o normal, não um pedido de português; devolver "pt" ali fazia o menu
+    abrir em português para todo mundo, que é justamente o bug que isto
+    corrige.
     """
     explicit = os.environ.get("READROID_LANG", "")
     if explicit.strip():
@@ -46,7 +50,7 @@ def detect() -> str:
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
         value = os.environ.get(var, "")
         if value.strip():
-            return "tr" if _is_tr(value) else FALLBACK_LANG
+            return "tr" if _is_tr(value) else DEFAULT_LANG
     return DEFAULT_LANG
 
 

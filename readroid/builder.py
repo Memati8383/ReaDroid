@@ -227,7 +227,10 @@ def sign_apk(apk: Path, keystore: Path, alias: str = DEFAULT_ALIAS,
                "--ks-pass", f"pass:{storepass}", "--key-pass", f"pass:{keypass or storepass}", str(apk)]
         result = _run(cmd, timeout=180)
         ok = result["returncode"] == 0
-        return {"ok": ok, "tool": "apksigner", "scheme": "v1 + v2 + v3", "returncode": result["returncode"],
+        # Não inventamos o esquema aqui: o apksigner só aplica v1 quando o
+        # minSdk do APK pede, e dizer "v1 + v2 + v3" mentia em toda rebuild.
+        # Os esquemas reais saem de verify_apk(), que lê o 'apksigner verify'.
+        return {"ok": ok, "tool": "apksigner", "returncode": result["returncode"],
                 "stderr": result["stderr"][-2000:]}
     jarsigner = shutil.which("jarsigner")
     if jarsigner:
@@ -241,12 +244,20 @@ def sign_apk(apk: Path, keystore: Path, alias: str = DEFAULT_ALIAS,
     return {"ok": False, "message": t("builder.err.no_signer")}
 
 
+# "Verified using v2 scheme (APK Signature Scheme v2): true" - o apksigner
+# imprime uma linha por esquema e a resposta é o que vale, não o que pedimos.
+_SCHEME_RE = re.compile(r"Verified using (v[\d.]+) scheme[^:]*:\s*(true|false)", re.I)
+
+
 def verify_apk(apk: Path) -> dict[str, Any]:
     apksigner = shutil.which("apksigner")
     if not apksigner:
         return {"ok": None, "message": t("builder.err.no_apksigner_verify")}
     result = _run([apksigner, "verify", "--verbose", str(apk)], timeout=60)
-    return {"ok": result["returncode"] == 0, "stdout": result["stdout"][-3000:], "stderr": result["stderr"][-2000:]}
+    schemes = [m.group(1) for m in _SCHEME_RE.finditer(result["stdout"])
+               if m.group(2).lower() == "true"]
+    return {"ok": result["returncode"] == 0, "schemes": schemes,
+            "stdout": result["stdout"][-3000:], "stderr": result["stderr"][-2000:]}
 
 
 def build_pipeline(decoded_dir: Path, work_dir: Path, keystore: Path, alias: str = DEFAULT_ALIAS,

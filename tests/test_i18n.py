@@ -99,14 +99,19 @@ class CatalogTests(unittest.TestCase):
 
 
 class LanguageDetectionTests(unittest.TestCase):
+    LOCALE_VARS = ("READROID_LANG", "LC_ALL", "LC_MESSAGES", "LANG")
+
     def setUp(self):
-        self._saved = os.environ.get("READROID_LANG")
+        self._saved = {v: os.environ.get(v) for v in self.LOCALE_VARS}
+        for var in self.LOCALE_VARS:
+            os.environ.pop(var, None)
 
     def tearDown(self):
-        if self._saved is None:
-            os.environ.pop("READROID_LANG", None)
-        else:
-            os.environ["READROID_LANG"] = self._saved
+        for var, value in self._saved.items():
+            if value is None:
+                os.environ.pop(var, None)
+            else:
+                os.environ[var] = value
         i18n.reload_for_tests(None)
 
     def test_readroid_lang_tr(self):
@@ -118,12 +123,27 @@ class LanguageDetectionTests(unittest.TestCase):
         self.assertEqual(i18n.detect(), "pt")
 
     def test_lc_all_tr(self):
-        os.environ.pop("READROID_LANG", None)
         os.environ["LC_ALL"] = "tr_TR.UTF-8"
         self.assertEqual(i18n.detect(), "tr")
 
     def test_readroid_lang_wins_over_locale(self):
         os.environ["LC_ALL"] = "tr_TR.UTF-8"
+        os.environ["READROID_LANG"] = "pt"
+        self.assertEqual(i18n.detect(), "pt")
+
+    def test_no_locale_uses_fork_default(self):
+        self.assertEqual(i18n.detect(), "tr")
+
+    def test_foreign_locale_uses_fork_default_not_fallback(self):
+        """Regressão: um LANG=en_US.UTF-8 (o padrão de fábrica do Termux) fazia
+        o menu abrir em português para todo mundo. O fork é bilíngue e o padrão
+        é o catálogo turco; português exige READROID_LANG=pt."""
+        for locale in ("en_US.UTF-8", "C", "pt_BR.UTF-8", "tr_TR", ""):
+            os.environ["LANG"] = locale
+            self.assertEqual(i18n.detect(), "tr", locale)
+
+    def test_readroid_lang_pt_is_the_only_route_to_portuguese(self):
+        os.environ["LANG"] = "en_US.UTF-8"
         os.environ["READROID_LANG"] = "pt"
         self.assertEqual(i18n.detect(), "pt")
 

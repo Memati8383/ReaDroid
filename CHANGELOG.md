@@ -1,5 +1,39 @@
 # Changelog
 
+## TR - Türkçe Çeviri (bu depo)
+- **Arayüz metinlerinin tamamı Türkçeleştirildi** (`readroid/i18n.py` + `locales/tr.json`, 160 anahtar).
+  Orijinal Portekizce metinler `locales/pt.json` içinde korunuyor.
+- Dil seçimi: `READROID_LANG` > `LC_ALL` > `LC_MESSAGES` > `LANG`. Açık bir `READROID_LANG=pt`
+  değeri ortam diline yenik düşer; hiçbiri yoksa fork kendi dilinde (Türkçe) açılır.
+- **Evet/hayır artık iki konvansiyonu da kabul ediyor.** Türkçe `[e/H]` yazısına `e` (evet) yazan
+  kullanıcı, önceki `== "s"` karşılaştırması yüzünden yanlışlıkla "hayır" alıyordu. `i18n.is_yes()`
+  `s/sim/yes/e/evet` tanır.
+- `[P]` (Portekizce "outro caminho") yazısı `[Y]` (yol) oldu; eski `p` yanıtı da çalışmaya devam ediyor.
+- **Banner kutusu artık sabit 42 karakter değil, içeriğin genişliğinden ölçülüyor.** Türkçe alt
+  başlıklar Portekizceden daha uzun ve eski hesap dar terminalde kutuyu taşırıyordu.
+- `install.sh` de aynı mekanizmayla iki dilli: Türkçe varsayılan, `READROID_LANG=pt` ile Portekizce.
+- JSON raporlarında **anahtarlar İngilizce kaldı** (makine tarafından okunuyor); `note`, `warning`,
+  `message`, `security_note` ve `decoded_by` gibi **değerler** etkin dilde yazılıyor.
+- **Rapor dosyası adı artık dilden bağımsız.** Önceden arayüz başlığından türetiliyordu
+  (`app_inspeção_apk_...`); şimdi sabit bir ASCII tanımlayıcı kullanılıyor (`app_inspection_...`).
+  Eski rapor adlarıyla çakışma yaşanabilir.
+- `QUICK_EDITS` sözlüğü `QUICK_EDIT_KEYS` + `t()` etiketlerine dönüştü; etiketler artık çalışma
+  zamanında çözülüyor.
+- `tools/extract_strings.py` bir migrasyon aracı olmaktan çıktı, `t()` sarmalamayı unutan metinleri
+  bulan bir linter oldu. `tools/ui_smoke.py` arayüzü APK olmadan render eder.
+- `tests/test_i18n.py` eklendi (18 test): katalog anahtar kümesi eşitliği, `{placeholder}` eşleşmesi,
+  boş çeviri yokluğu, kodda kullanılan her anahtarın katalogda olması, iki evet/hayır konvansiyonu,
+  dil algılama önceliği.
+- `tests/test_analyzer.py` metinlere karşı doğrulama yaptığı için Portekizceye sabitlendi; artık
+  `LANG=tr` bir terminalde de yeşil.
+- Dokümanlar Türkçeleştirildi. Orijinal Portekizce README `README.pt.md` olarak duruyor.
+
+### Bilinen sınırlar
+- Statik analiz ve yeniden derleme akışının tamamı cihazda doğrulanmadı; çeviri katmanı masaüstünde
+  iki dilde test edildi, `apktool`/`zipalign`/`apksigner` zinciri Termux'ta denenmeli.
+- Sadece Türkçe ve Portekizce katalogları var. `locales/` altına başka bir dil eklemek için
+  `locales/<lang>.json` + `readroid/i18n.py`'deki `detect()` eşiği yeterli.
+
 ## 0.1.0 - 2026-10-16
 - Primeira versão pública planejada para Termux sem root.
 - Menu interativo com marca d'água discreta OffensiveTec.

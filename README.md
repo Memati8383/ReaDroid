@@ -1,139 +1,197 @@
-# ReaDroid
+# ReaDroid — Türkçe
 
-**Android Reverse Engineering Toolkit** — análise estática e reconstrução de APKs para Android 12–16, projetada para rodar no Termux sem root e sem inteligência artificial.
+**Android Tersine Mühendislik Araç Kutusu** — Android 12–16 için statik APK analizi ve yeniden derleme. Termux üzerinde root'suz ve yapay zekâsız çalışmak için tasarlandı.
 
-> **OffensiveTec** é uma marca d'água discreta na interface do terminal.
+> Bu depo, [Memati8383/ReaDroid](https://github.com/Memati8383/ReaDroid) projesinin **Türkçe çevirisidir**. Kod, çekirdek mantık ve araç zinciri orijinaline aittir; bu çalışma yalnızca arayüz metinlerini ve belgeleri Türkçeleştirir.
 
-## Recursos
+## Dil seçimi
 
-- Inspeção da estrutura ZIP do APK, hashes SHA-256, arquivos DEX e bibliotecas nativas.
-- **Leitor de AndroidManifest.xml binário (AXML) nativo**, em Python puro - decodifica o manifesto de
-  qualquer APK real sem precisar de JADX, Apktool ou aapt2. Essas ferramentas continuam disponíveis
-  como reforço para os raros casos em que o parser próprio não dá conta.
-- Busca estática de URLs, domínios (com lista de TLDs reais, pra não confundir nome de classe com domínio)
-  e candidatos a endereços IPv4.
-- Integração opcional com JADX para decompilar DEX em código Java aproximado.
-- Integração opcional com Apktool para extrair recursos e smali.
-- **Reconstrução, alinhamento e assinatura automatizados**: depois de editar o smali/recursos extraídos,
-  um único fluxo (`apktool b` + `zipalign` + `apksigner`/`jarsigner`) gera um APK pronto para instalar.
-- **Edições rápidas** no manifesto decodificado (debuggable, allowBackup, tráfego em texto puro, permissão
-  de INTERNET) antes de reconstruir.
-- **Renomear o pacote (applicationId)**: move as pastas smali e atualiza as referências de classe,
-  além do manifesto - melhor esforço, pensado pra reempacotar seu próprio app com outro nome de pacote.
-- Relatórios JSON locais, sem serviços externos ou telemetria.
-- Menu de terminal pensado para telas de celular, com saída sanitizada (sem risco de um APK malicioso
-  injetar códigos de escape no seu terminal).
-- Explorador interativo para navegar e abrir arquivos Java, Kotlin, Smali, XML, JSON, relatórios e os
-  APKs reconstruídos diretamente pelo menu.
-- Resultado de JADX identificado como sucesso, parcial ou falha conforme o código de saída e os arquivos realmente gerados.
-- Saídas salvas na pasta da cópia do projeto em uso, evitando confusão com outra pasta `~/ReaDroid`.
+Arayüz dili şu sırayla belirlenir:
 
-## Compatibilidade
+```bash
+READROID_LANG=tr python readroid.py    # Türkçe (varsayılan)
+READROID_LANG=pt python readroid.py    # Orijinal Portekizce metinler
+python readroid.py                     # LANG/LC_ALL tr ise Türkçe, değilse Portekizce
+```
 
-O ReaDroid usa Python e biblioteca padrão para seu núcleo (incluindo a leitura do manifesto). Foi escrito visando Termux ARM64 e Android 12–16, mas não foi possível testar em todos os aparelhos/versões. As ferramentas externas opcionais dependem dos pacotes e da arquitetura disponíveis no repositório Termux do usuário. Compatível com Python 3.9 ou mais novo.
+Metinler `locales/tr.json` ve `locales/pt.json` içinde, anlamsal anahtarlarla tutulur. Bir metni değiştirmek için kodu değil, kataloğu düzenleyin.
 
-O JADX requer Java compatível; a documentação upstream informa Java 11 ou posterior. O pacote JADX do Termux normalmente depende do OpenJDK empacotado no Termux. Apktool em Android tem incompatibilidades oficiais conhecidas em algumas configurações, portanto o recurso é opcional e deve ser validado no aparelho.
+---
 
-## Instalação no Termux
+## Bu çeviri hakkında
 
-Atualize os pacotes:
+- **Varsayılan dil Türkçedir.** Orijinal davranış `READROID_LANG=pt` ile bir düğme kadar uzakta.
+- Evet/hayır soruları her iki alışkanlığı da kabul eder: `[e/H]` yazısını görüp `e` yazan kullanıcı da, `[s/N]` görüp `s` yazan kullanıcı da doğru davranır.
+- Menüdeki `[Y]` (yol) seçeneği, Portekizcedeki `[P]` karşılığıdır; eski `p` yanıtı da çalışır.
+- JSON raporlarının **anahtarları** İngilizce kalır (makine tarafından okunur); `note`, `warning`, `message` gibi **değerler** etkin dilde yazılır.
+- Rapor dosyası adları dilden bağımsızdır: `app_inspection_20261018_120000.json`. Önceki sürümlerde dosya adı arayüz başlığından türetiliyordu, bu yüzden eski raporlarla isim çakışması olabilir.
+- Kod içindeki yorumlar ve docstring'ler bilinçli olarak Portekizce bırakıldı — upstream'in konvansiyonu bu ve orijinalle farkın küçük kalmasını sağlıyor.
+
+---
+
+## Özellikler
+
+- APK'nın ZIP yapısını inceleme, SHA-256 özetleri, DEX dosyaları ve yerel kütüphaneler.
+- **Saf Python ile yazılmış, yerel ikili (AXML) `AndroidManifest.xml` okuyucu.** Gerçek bir APK'nın
+  manifestini JADX, Apktool veya aapt2 olmadan çözer. Bu araçlar, kendi ayrıştırıcısının yetmediği
+  enderka durumlar için yedek olarak duruyor.
+- Statik URL, alan adı (sınıf adını alan adıyla karıştırmamak için gerçek TLD listesiyle) ve
+  aday IPv4 adresi arama.
+- DEX'i yaklaşık Java koduna çözmek için isteğe bağlı JADX entegrasyonu.
+- Kaynakları ve smali'yi çıkarmak için isteğe bağlı Apktool entegrasyonu.
+- **Otomatik yeniden derleme, hizalama ve imzalama**: çıkarılan smali/kaynakları düzenledikten sonra
+  tek akış (`apktool b` + `zipalign` + `apksigner`/`jarsigner`) kuruluma hazır bir APK üretir.
+- Çözülmüş manifest üzerinde **hızlı düzenlemeler** (debuggable, allowBackup, düz metin trafiği,
+  INTERNET izni) — yeniden derlemeden önce.
+- **Paketi (applicationId) yeniden adlandırma**: smali klasörlerini taşır ve sınıf referanslarını
+  günceller; kendi uygulamanızı farklı bir paket adıyla yeniden paketlemek için tasarlandı.
+- Yalnızca yerel JSON raporları; dış servis veya telemetri yok.
+- Telefon ekranı için tasarlanmış terminal menüsü, temizlenmiş çıktı ile (kötü amaçlı bir APK
+  terminalinize kaçış kodu enjekte edemez).
+- Java, Kotlin, Smali, XML, JSON, raporlar ve yeniden derlenmiş APK'lar üretilen dosyalar için
+  menüden gezilebilir etkileşimli dosya gezgini.
+- JADX sonucu, çıkış koduna ve gerçekten üretilen dosyalara göre başarılı / kısmi / başarısız
+  olarak ayrılır.
+- Çıktılar, çalıştırdığınız proje kopyasının içine kaydedilir — diğer bir `~/ReaDroid` klasörüyle
+  karışmaz.
+
+## Uyumluluk
+
+ReaDroid çekirdeği için (manifest okuma dahil) yalnızca Python ve standart kütüphanesini kullanır.
+Termux ARM64 ve Android 12–16 hedeflenerek yazıldı, ancak her cihaz/sürümde test edilemedi. İsteğe
+bağlı harici araçlar, kullanıcının Termux deposunda bulunan paketlere ve mimariye bağlıdır.
+Python 3.9 ve üzeri gerekir.
+
+JADX uyumlu bir Java ister; upstream dokümantasyonuna göre Java 11 veya sonrası. Termux'taki JADX
+paketi genellikle Termux ile gelen OpenJDK'ya bağımlıdır. Apktool'ın Android'de bazı yapılandırmalarda
+bilinen resmî uyumsuzlukları var; bu yüzden özellik isteğe bağlıdır ve cihazda doğrulanmalıdır.
+
+## Termux'a kurulum
+
+Paketleri güncelleyin:
 
 ```bash
 pkg update && pkg upgrade
 pkg install python openjdk-21 jadx apktool aapt unzip git
-pkg install apksigner   # opcional, mas recomendado - veja "Reconstrução" abaixo
+pkg install apksigner   # isteğe bağlı ama önerilir - aşağıdaki "Yeniden derleme" bölümüne bakın
 ```
 
-`aapt` já inclui o `zipalign`. Se `openjdk-21`, `jadx`, `apktool` ou `apksigner` não estiverem disponíveis no repositório configurado, instale os pacotes disponíveis e consulte a documentação oficial/README do Termux. O ReaDroid não baixa binários executáveis de terceiros automaticamente.
+`aapt` paketi `zipalign` aracını zaten içerir. `openjdk-21`, `jadx`, `apktool` veya `apksigner`
+yapılandırılmış depoda yoksa, bulunan paketleri kurun ve Termux'in resmî dokümantasyonuna başvurun.
+ReaDroid üçüncü taraf çalıştırılabilir dosyalarını kendiliğinden indirmez.
 
-Clone o repositório (substitua pela URL do seu repositório depois de criá-lo):
+Depoyu kopyalayın:
 
 ```bash
-git clone https://github.com/Mcsd7/ReaDroid.git
-cd ReaDroid
+git clone https://github.com/<KULLANICI-ADIN>/ReaDroid-TR.git
+cd ReaDroid-TR
 python readroid.py
 ```
 
-Ou, se você já baixou os arquivos, execute `bash install.sh` e depois `python readroid.py`.
+Dosyaları zaten indirdiyseniz `bash install.sh` ve ardından `python readroid.py` çalıştırın.
 
-Para escolher APKs na pasta Download, habilite o acesso ao armazenamento quando o Termux pedir:
+Download klasöründen APK seçebilmek için Termux istediğinde depolama iznini verin:
 
 ```bash
 termux-setup-storage
 ```
 
-Caminho de exemplo: `~/storage/shared/Download/app.apk`.
+Örnek yol: `~/storage/shared/Download/uygulama.apk`.
 
-## Como usar
+## Nasıl kullanılır
 
-1. Abra `python readroid.py`.
-2. Selecione a análise no menu.
-3. Cole o caminho do APK quando solicitado (ou escolha um dos encontrados automaticamente na pasta Download).
-4. Consulte relatórios em `reports/` e arquivos exportados em `output/`, dentro da pasta do projeto que você está executando. Use a opção **9 — Explorar e abrir arquivos gerados** para navegar pelas pastas e abrir os arquivos.
+1. `python readroid.py` çalıştırın.
+2. Menüden analizi seçin.
+3. İstendiğinde APK yolunu girin (ya da Download klasöründe otomatik bulunanlardan birini seçin).
+4. Raporları `reports/`, dışa aktarılan dosyaları `output/` içinde, çalıştırdığınız proje klasöründe
+   bulun. Klasörlerde gezinmek ve dosyaları açmak için **9 — Üretilen dosyalara göz at ve aç**
+   seçeneğini kullanın.
 
-O caminho do APK pode ser absoluto ou relativo ao diretório atual. Para a opção JADX, o programa usa no máximo quatro threads (padrão de duas) para reduzir pressão de memória. APKs grandes podem continuar exigindo muita RAM e armazenamento.
+APK yolu mutlak veya bulunduğunuz dizine göreli olabilir. JADX seçeneğinde program bellek baskısını
+azaltmak için en fazla dört iş parçacığı kullanır (varsayılan iki). Büyük APK'lar hâlâ bol RAM ve
+depolama isteyebilir.
 
-## Reconstrução, alinhamento e assinatura (opções 5, 10, 11, 12)
+## Yeniden derleme, hizalama ve imzalama (5, 10, 11, 12 numaralı seçenekler)
 
-Esse fluxo deixa um APK pronto para instalar sem você precisar decorar `apktool`/`zipalign`/`apksigner`:
+Bu akış, `apktool`/`zipalign`/`apksigner` komutlarını ezberlemeden kuruluma hazır bir APK üretir:
 
-1. **Opção 5** decodifica o APK com o Apktool (smali + recursos legíveis).
-2. Edite os arquivos dentro da pasta gerada (`output/<app>_apktool/`) com qualquer editor de texto no celular.
-   Para ajustes comuns sem editar nada à mão, use a **opção 10** (edições rápidas no manifesto).
-3. Ainda na **opção 10** (ou direto na 11, antes de compilar), você pode **renomear o pacote**
-   (applicationId). Isso move as pastas `smali`/`smali_classesN` do pacote antigo para o novo e troca
-   as referências de classe encontradas nos arquivos `.smali` e no manifesto. É melhor esforço: código
-   que monta o nome do pacote via reflection ou em runtime pode não ser coberto - teste o APK reconstruído
-   antes de confiar nele.
-4. **Opção 11** reconstrói (`apktool b`), alinha (`zipalign`) e assina (`apksigner`, com `jarsigner` como
-   alternativa se o apksigner não estiver instalado) em sequência. O APK final fica em `builds/` e,
-   se o armazenamento estiver liberado, uma cópia também vai para `Downloads/ReaDroid/`.
-5. **Opção 12** mostra ou recria a chave de assinatura usada (gerada automaticamente na primeira
-   reconstrução).
+1. **5. seçenek** APK'yı Apktool ile çözer (okunabilir smali + kaynaklar).
+2. Üretilen klasördeki (`output/<app>_apktool/`) dosyaları telefondaki herhangi bir metin editörüyle
+   düzenleyin. Elle uğraşmak istemediğiniz sıradan ayarlar için **10. seçeneği** (manifest üzerinde
+   hızlı düzenlemeler) kullanın.
+3. Yine **10. seçenekte** (ya da doğrudan 11'de, derlemeden önce) **paketi yeniden adlandırabilirsiniz**
+   (applicationId). Bu işlem `smali`/`smali_classesN` klasörlerini eski paketten yenisine taşır ve
+   `.smali` dosyaları ile manifestteki sınıf referanslarını değiştirir. En iyi çaba yöntemidir:
+   paket adını reflection veya çalışma zamanında oluşturan kod kapsanamayabilir — güvenmeden önce
+   yeniden derlenmiş APK'yı test edin.
+4. **11. seçenek** sırasıyla yeniden derler (`apktool b`), hizalar (`zipalign`) ve imzalar
+   (`apksigner`; apksigner kurulu değilse `jarsigner` alternatifi). Son APK `builds/` içine düşer ve
+   depolama izni verilmişse bir kopyası `Downloads/ReaDroid/` klasörüne de gider.
+5. **12. seçenek** kullanılan imzalama anahtarını gösterir veya yeniden oluşturur (ilk yeniden
+   derlemede otomatik oluşturulur).
 
-Sem o `apksigner`, o ReaDroid usa o `jarsigner` do próprio Java (assinatura v1/JAR apenas). Isso costuma
-funcionar, mas apps com `targetSdkVersion` 24 ou mais podem ser recusados pelo instalador do Android 7+
-sem a assinatura v2. Instale `pkg install apksigner` para assinatura completa (v1+v2+v3).
+`apksigner` yoksa ReaDroid, Java'nın kendi `jarsigner` aracını kullanır (yalnızca v1/JAR imzası). Bu
+genellikle çalışır, ancak `targetSdkVersion` değeri 24 veya üzeri olan uygulamalar v2 imzası olmadan
+Android 7+ yükleyicisi tarafından reddedilebilir. Tam imza (v1+v2+v3) için `pkg install apksigner`
+çalıştırın.
 
-**Importante:** use isso só em APKs seus ou que você tem autorização para modificar. Reassinar um app
-troca a identidade do desenvolvedor original - o resultado não substitui o app da loja, e redistribuir
-o APK modificado de outra pessoa sem permissão pode violar a licença dela. Veja `SECURITY.md`.
+**Önemli:** bunu yalnızca kendi APK'larınızda veya değiştirmeye yetkili olduğunuz APK'larda kullanın.
+Bir uygulamayı yeniden imzalamak orijinal geliştiricinin kimliğini değiştirir — sonuç mağazadaki
+uygulamanın yerini almaz ve başkasının değiştirilmiş APK'sını izin olmadan dağıtmak onun lisansını
+ihlal edebilir. `SECURITY.md` bölümüne bakın.
 
-## Limitações importantes
+## Önemli sınırlar
 
-- ReaDroid faz análise estática. Não executa o APK nem monitora seu comportamento em tempo real.
-- O leitor nativo de AXML cobre o que a maioria das análises precisa (pacote, versão, permissões,
-  componentes, flags do `<application>`); para manifestos com estruturas incomuns, a ferramenta ainda
-  tenta JADX/Apktool/aapt2 como reforço.
-- JADX não recupera perfeitamente todo o código original; nomes podem estar ofuscados e comentários/nomes originais podem ter sido perdidos.
-- URLs, domínios, IPs e permissões são pistas para revisão manual, não provas de malware.
-- O scanner tem limites de tamanho e de itens por categoria para evitar consumo excessivo de memória; o
-  relatório avisa em `truncated_categories` quando uma lista pode estar incompleta.
-- A reconstrução depende de `apktool`/`zipalign`/`apksigner` (ou `jarsigner`) estarem instalados; sem
-  eles, cada etapa informa exatamente o que falta.
-- O ReaDroid não modifica nem assina o APK original - toda reconstrução gera um arquivo novo em `builds/`.
+- ReaDroid statik analiz yapar. APK'yı çalıştırmaz, davranışını gerçek zamanlı izlemez.
+- Yerel AXML okuyucu, çoğu analizin ihtiyaç duyduğu alanı kapsar (paket, sürüm, izinler, bileşenler,
+  `<application>` bayrakları); alışılmadık yapılara sahip manifestlerde araç yine de
+  JADX/Apktool/aapt2'yi yedek olarak dener.
+- JADX özgün kodun tamamını kusursuz geri getirmez; adlar bulanıklaştırılmış olabilir, özgün
+  yorumlar ve adlar kaybolmuş olabilir.
+- URL'ler, alan adları, IP'ler ve izinler elle inceleme ipuçlarıdır — kötü amaçlı yazılım kanıtı değildir.
+- Tarayıcı, aşırı bellek tüketimini önlemek için boyut ve kategori başına öğe sınırı uygular;
+  bir liste eksik olabilecekse rapor `truncated_categories` alanında uyarır.
+- Yeniden derleme, `apktool`/`zipalign`/`apksigner` (ya da `jarsigner`) kurulu olmasına bağlıdır;
+  bunlar yokken her adım eksik olanı açıkça söyler.
+- ReaDroid orijinal APK'yı değiştirmez ve imzalamaz — her yeniden derleme `builds/` içinde yeni bir
+  dosya üretir.
 
-## Segurança e uso responsável
+## Güvenlik ve sorumlu kullanım
 
-Analise aplicativos próprios, de teste ou para os quais você tem autorização. APKs são arquivos não confiáveis; evite executá-los. A ferramenta chama JADX/Apktool/zipalign/apksigner com argumentos separados (sem shell) e não envia os APKs para a internet. A saída das ferramentas é salva localmente. Veja `SECURITY.md` para as considerações específicas sobre reconstrução e assinatura.
+Kendi, test amaçlı veya değiştirmeye yetkili olduğunuz uygulamaları inceleyin. APK'lar güvenilmeyen
+dosyalardır; çalıştırmaktan kaçının. Araç JADX/Apktool/zipalign/apksigner'ı ayrı argümanlarla çağırır
+(shell üzerinden değil) ve APK'ları internete göndermez. Araç çıktıları yerel olarak kaydedilir.
+Yeniden derleme ve imzalamaya özel hususlar için `SECURITY.md` dosyasına bakın.
 
-## Testes
-
-Execute:
+## Testler
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-## Licença
+Testler dilden bağımsız çalışır. Metinlere doğrulama yapan `tests/test_analyzer.py` Portekizce'yi
+sabitler; `tests/test_i18n.py` iki katalogun anahtar kümesinin aynı olduğunu, `{placeholder}` eşleşmelerini,
+boş çevirilerin olmadığını ve iki evet/hayır konvansiyonunun da tanındığını doğrular.
 
-MIT. Consulte `LICENSE`.
+Yeni bir metin eklerken:
 
-## Créditos
+```bash
+python tools/extract_strings.py --stats   # t() sarmalaymayı unuttuğun metinleri listeler
+```
 
-ReaDroid é uma interface/automação original que integra ferramentas de terceiros opcionais. JADX, Apktool e apksigner mantêm seus próprios projetos, licenças e termos; veja os links abaixo.
+## Lisans
+
+MIT. `LICENSE` dosyasına bakın.
+
+## Krediler
+
+ReaDroid, isteğe bağlı üçüncü taraf araçları bütünleştiren özgün bir arayüz/otomasyondur. Orijinal
+proje [Memati8383/ReaDroid](https://github.com/Memati8383/ReaDroid) — telif hakkı OffensiveTec'e
+aittir. JADX, Apktool ve apksigner kendi projeleri, lisansları ve koşullarıyla ayrıdır:
 
 - JADX: https://github.com/skylot/jadx
 - Apktool: https://github.com/iBotPeaches/Apktool
 - apksigner (Termux): https://github.com/termux/termux-packages
 - Termux: https://github.com/termux/termux-app
+
+Türkçe çeviri, `locales/tr.json` ve bu dokümantasyon bu depoya özeldir.

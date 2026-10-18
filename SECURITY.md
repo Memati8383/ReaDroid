@@ -1,13 +1,29 @@
-# Política de segurança
+# Güvenlik politikası
 
-Para relatar uma falha no ReaDroid, abra uma issue sem anexar APKs privados, tokens, chaves ou dados pessoais. Explique o impacto e forneça um exemplo mínimo não sensível.
+ReaDroid'da bir hata bildirmek için özel APK'lar, anahtarlar, token'lar veya kişisel veri
+eklemeden bir issue açın. Etkisini açıklayın ve hassas olmayan en küçük örneği verin.
 
-O ReaDroid é uma ferramenta de análise estática. APKs desconhecidos devem ser tratados como arquivos não confiáveis e não devem ser executados apenas por terem sido analisados pela ferramenta.
+ReaDroid statik analiz aracıdır. Bilinmeyen APK'lar güvenilmeyen dosyalar olarak
+değerlendirilmelidir; araç tarafından incelenmiş olmaları tek başına çalıştırılmaları için
+gerekçe değildir.
 
-## Sobre a reconstrução e assinatura de APKs
+## APK'ların yeniden derlenmesi ve imzalanması hakkında
 
-A partir da versão 0.3.0 o ReaDroid também reconstrói e assina APKs (apktool + zipalign + apksigner/jarsigner). Use esse recurso apenas em aplicativos seus ou para os quais você tem autorização explícita de modificar:
+0.3.0 sürümünden itibaren ReaDroid APK'ları yeniden derleyip imzalar da (apktool + zipalign +
+apksigner/jarsigner). Bu özelliği yalnızca kendi uygulamalarınızda veya açık izin verdiğiniz
+uygulamalarda kullanın:
 
-- Reassinar um APK troca a identidade do desenvolvedor original. O resultado não é uma atualização do app da loja e o Android vai tratá-lo como um aplicativo diferente.
-- Redistribuir o APK modificado de outra pessoa sem permissão pode violar a licença e os termos de uso do app original.
-- O ReaDroid não contorna proteções de DRM, verificação de licença ou ofuscação; ele só automatiza o fluxo padrão de build do ecossistema Android (o mesmo `apktool`/`zipalign`/`apksigner` documentados pelo próprio Android Open Source Project).
+- Bir APK'yı yeniden imzalamak orijinal geliştiricinin kimliğini değiştirir. Sonuç mağazadaki
+  uygulamanın güncellemesi değildir ve Android onu farklı bir uygulama olarak ele alır.
+- Başkasının değiştirilmiş APK'sını izin olmadan dağıtmak, özgün uygulamanın lisansını ve kullanım
+  koşullarını ihlal edebilir.
+- ReaDroid DRM korumalarını, lisans doğrulamasını veya obfuscation'ı aşmaz; yalnızca Android
+  ekosistemunun standart derleme akışını otomatikleştirir (Android Open Source Project'ın
+  belgelediği `apktool`/`zipalign`/`apksigner` dizisi).
+
+## Bu çeviri hakkında
+
+Arayüz metinleri `locales/tr.json` içindedir ve bir çalışma zamanı hatası değil, kullanıcı
+girdisi olarak değerlendirilmelidir: APK'ların içinden gelen metinler `app.sanitize()` ile
+temizlenmeden asla ekrana yazılmaz. Bir çeviri hatası bildirmek için README'deki dil seçimi
+bölümüne bakın ve `READROID_LANG=pt` ile karşılaştırın.

@@ -1,5 +1,23 @@
 # Changelog
 
+> **Bu dosyanın yapısı:** önce bu fork'a ait değişiklikler (Türkçe), sonra upstream'in sürüm
+> geçmişi. Upstream `5dc6f75` commit'iyle belgelerini Portekizceden İngilizceye çevirdi; o çeviri
+> `README.en.md` olarak korunuyor, Portekizce orijinaller `README.pt.md`'de. Upstream'in sürüm
+> geçmişi İngilizce bırakıldı — kendi içeriği, kendi dilinde.
+
+## Upstream senkronizasyonu
+
+- **`5baa288` birleştirildi** (`MriBoyd` PR #1, "translate documentation files to English").
+  Değişen dosyalar: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`.
+  **Kodda değişiklik yok** — `readroid/`, `tests/`, `install.sh` hiç dokunulmadı.
+- **Çakışma çözümü:** dört dosyanın da bu fork'un sürümü korundu, çünkü arayüz Türkçe kalmalı.
+  Upstream'in İngilizce README'si kaybolmasın diye **`README.en.md` eklendi**; fork'ın ekledikleri
+  (tek komut kurulum, selfcheck, Türkçe varsayılan) anlatılarak üzerine yazıldı.
+- **Upstream Portekizce `README.md`'yi üzerine yazarak silmişti** — `README.en.md` eklememişlerdi.
+  `README.pt.md`, o orijinalin artık tek çalışma ağacı kopyası.
+- `CHANGELOG.md` çakışmadan otomatik birleşti: TR bölümü üstte kaldı, sürüm geçmişi
+  upstream'in İngilizcesi olarak güncellendi.
+
 ## TR - Türkçe Çeviri (bu depo)
 - **Arayüz metinlerinin tamamı Türkçeleştirildi** (`readroid/i18n.py` + `locales/tr.json`, 160 anahtar).
   Orijinal Portekizce metinler `locales/pt.json` içinde korunuyor.
@@ -95,50 +113,50 @@ yakalayıp tek komutu söylüyor ve README'ye "Sorun giderme" bölümü eklendi.
   `locales/<lang>.json` + `readroid/i18n.py`'deki `detect()` eşiği yeterli.
 
 ## 0.1.0 - 2026-10-16
-- Primeira versão pública planejada para Termux sem root.
-- Menu interativo com marca d'água discreta OffensiveTec.
-- Inspeção de APK, hash SHA-256, scanner de strings e relatórios JSON.
-- Integração opcional com JADX e Apktool.
-- Documentação, instalador opcional e testes básicos.
+- Initial public release designed for non-root Termux.
+- Interactive menu featuring a subtle OffensiveTec watermark.
+- APK inspection, SHA-256 hash calculation, string scanner, and JSON reports.
+- Optional JADX and Apktool integrations.
+- Documentation, optional installer script, and basic tests.
 
 ## 0.2.0
-- Corrigido o caminho-base: relatórios e saídas ficam junto da cópia do projeto em execução.
-- JADX agora informa sucesso completo, parcial ou falha com base nos arquivos gerados.
-- Adicionado explorador interativo para navegar e abrir arquivos decompilados e relatórios pelo menu.
-- Melhorada a busca automática por APKs na pasta Download do Termux/Android.
+- Fixed base path resolution: reports and outputs are stored alongside the running project clone.
+- JADX now reports full success, partial output, or failure based on generated files.
+- Added interactive file explorer to navigate and open decompiled files and reports from the menu.
+- Improved automatic APK discovery in the Termux/Android Download directory.
 
 ## 0.3.0 - 2026-10-18
-- **Leitor de AndroidManifest.xml binário (AXML) nativo, sem dependências.** Antes, o manifesto só
-  era lido quando vinha como XML textual (quase nenhum APK real); agora o formato binário que todo
-  APK de verdade usa é decodificado em Python puro. JADX/Apktool/aapt2 viraram um reforço para os
-  raros casos em que o parser próprio falha, não mais o caminho principal.
-- **Reconstrução e compilação automatizada (novo menu 11).** `apktool b` + `zipalign` + assinatura
-  (`apksigner`, com `jarsigner` como alternativa) em um fluxo só: decodifique com a opção 5, edite,
-  rode a 11 e saia com um APK alinhado e assinado, pronto para instalar - sem decorar comandos.
-- **Edições rápidas no manifesto (novo menu 10):** debuggable, allowBackup, tráfego em texto puro e
-  permissão de INTERNET, aplicadas direto na pasta decodificada antes da reconstrução.
-- **Gerenciamento de chave de assinatura (novo menu 12):** a keystore é criada automaticamente na
-  primeira reconstrução e reaproveitada depois.
-- Corrigido falso-positivo do scanner de strings: nomes de classes Android/Kotlin (`android.content.pm...`)
-  não aparecem mais como "domínio"; a lista de domínios agora usa TLDs reais.
-- O relatório do scanner agora avisa quando uma categoria (URLs/domínios/IPs) bateu no limite de itens
-  e pode estar incompleta, em vez de descartar o excedente silenciosamente.
-- Extensão do arquivo não é mais motivo de recusa (`.xapk`, `.apks` ou qualquer outra são aceitos se o
-  conteúdo for um ZIP válido); uma extensão incomum agora só gera um aviso no relatório.
-- Corrigido traceback ao fechar o terminal ou pressionar Ctrl+D/Ctrl+C: o menu agora encerra
-  normalmente em vez de travar com erro.
-- Corrigida a exibição de arquivos no explorador: strings e nomes de arquivo vindos do APK são
-  sanitizados antes de aparecer no terminal (remoção de sequências de escape ANSI e caracteres de
-  controle), e o `less -R` foi trocado por modo sem interpretação de códigos de escape.
-- Corrigido o número de versão reportado pela inspeção de APK (estava fixo em "0.1.0").
-- Corrigido o `install.sh`: o caminho final mostrado agora é o caminho real do projeto, não o texto
+- **Native binary AndroidManifest.xml (AXML) parser with zero dependencies.** Previously, manifests
+  were only parsed when present as plain text XML (almost no real-world APKs); the binary format used by
+  real APKs is now decoded in pure Python. JADX/Apktool/aapt2 serve as fallbacks for
+  rare parser failures rather than the primary path.
+- **Automated rebuilding and compilation (new menu option 11).** `apktool b` + `zipalign` + signing
+  (`apksigner`, with `jarsigner` fallback) in a single workflow: decode with option 5, edit,
+  run option 11, and obtain an aligned, signed, install-ready APK — without memorizing commands.
+- **Quick manifest edits (new menu option 10):** debuggable, allowBackup, cleartext traffic, and
+  INTERNET permission, applied directly to the decoded directory before rebuilding.
+- **Signing key management (new menu option 12):** the keystore is automatically created during the
+  first rebuild and reused for subsequent builds.
+- Fixed string scanner false positives: Android/Kotlin class names (`android.content.pm...`)
+  no longer match as "domains"; domain matching now verifies against real TLDs.
+- Scanner reports now indicate when a category (URLs/domains/IPs) hits item limits
+  and may be truncated, rather than discarding items silently.
+- File extensions are no longer rejected (`.xapk`, `.apks`, or any extension are accepted as long as the
+  file is a valid ZIP archive); unusual extensions now generate an informational notice in the report.
+- Fixed traceback on terminal close or Ctrl+D/Ctrl+C: the menu now exits cleanly
+  instead of crashing with an unhandled exception.
+- Fixed file viewing in the explorer: strings and filenames from APKs are
+  sanitized before display (stripping ANSI escape sequences and control characters),
+  and `less -R` was replaced with safe raw display mode.
+- Fixed version number reported during APK inspection (previously hardcoded to "0.1.0").
+- Fixed `install.sh`: the final path displayed now shows the actual project directory rather than
   literal `$SCRIPT_DIR`.
-- Adicionados `.gitignore` e `LICENSE` (MIT).
+- Added `.gitignore` and `LICENSE` (MIT).
 
 ## 0.3.1
-- **Renomear o pacote (applicationId)**, direto na pasta decodificada (opção 10, ou dentro da opção 11
-  antes de compilar): atualiza o `package=` do manifesto, move as pastas `smali`/`smali_classesN` do
-  caminho antigo para o novo e troca as referências de classe nos arquivos `.smali` (forma com ponto e
-  forma `Lcom/pacote/Classe;`). É melhor esforço - reflection, nomes montados em runtime ou ofuscação
-  pesada podem escapar da substituição, por isso o ReaDroid avisa pra testar o APK reconstruído antes
-  de confiar nele. Nomes de pacote parecidos (`com.x.app` vs `com.x.app2`) não são confundidos entre si.
+- **Package renaming (applicationId)** directly in the decoded directory (option 10, or within option 11
+  prior to building): updates manifest `package=`, moves `smali`/`smali_classesN` directories from
+  the old path to the new path, and rewrites class references across `.smali` files (both dotted format and
+  `Lcom/package/Class;` format). This is best-effort — reflection, dynamically assembled strings, or heavy
+  obfuscation may not be replaced, so ReaDroid prompts you to test the rebuilt APK before
+  relying on it. Similar package names (e.g., `com.x.app` vs `com.x.app2`) are not conflated.

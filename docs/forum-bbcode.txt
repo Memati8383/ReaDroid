@@ -135,17 +135,17 @@ imza [b]v2 + v3[/b] olarak doğrulandı.
 [spoiler=Bu test sırasında çıkan hatalar]
 Test etmenin sebebi buydu — masaüstünde yeşil olan üç şey telefonda patladı:
 
-[b][color=#E74C3C]1)[/color] [b]Varsayılan dil hiç çalışmıyordu.[/b] Kod, sistem dili Türkçe değilse
+[color=#E74C3C]1)[/color] [b]Varsayılan dil hiç çalışmıyordu.[/b] Kod, sistem dili Türkçe değilse
 Portekizce açıyordu. Android'de [code]LANG=en_US.UTF-8[/code] fabrika ayarı olduğu için
 Türkçe kullanıcı [code]READROID_LANG=tr[/code] yazmadan [i]Portekizce[/i] görüyordu.
 Düzeltildi: artık yabancı dil de Türkçe açıyor, Portekizce için açıkça istenmesi gerekiyor.
 
-[b][color=#E74C3C]2)[/color] [b]İmza şeması uyduruluyordu.[/b] Her imzada "v1 + v2 + v3"
+[color=#E74C3C]2)[/color] [b]İmza şeması uyduruluyordu.[/b] Her imzada "v1 + v2 + v3"
 yazıyordu. Cihazdaki doğrulama [code]v1: false, v2: true, v3: true[/code] dedi — çünkü
 apksigner v1'i ancak APK'nın minSdk'sı istediğinde uyguluyor. Artık şema tahmin
 edilmiyor; [code]apksigner verify[/code] çıktısı okunuyor.
 
-[b][color=#E74C3C]3)[/color] [b]Menü kutusu dar ekranda taşıyordu.[/b] Kutu sabit 42 karakter
+[color=#E74C3C]3)[/color] [b]Menü kutusu dar ekranda taşıyordu.[/b] Kutu sabit 42 karakter
 boyundaydı. Artık içeriğin genişliğinden ölçülüyor, 32 kolonluk ekranda bile sığıyor.
 
 Ayrıca i18n testleri eklendi: katalog anahtar kümesi eşitliği, [code]{placeholder}[/code]

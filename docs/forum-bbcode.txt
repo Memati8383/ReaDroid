@@ -1,0 +1,227 @@
+[center]
+[size=140][b]ReaDroid — Türkçe[/b][/size]
+[size=90][i]Android 12–16 için statik APK analizi ve yeniden derleme aracı.
+Termux üzerinde root'suz, çevrimdışı ve yapay zekâsız çalışır.[/i][/size]
+[/center]
+
+[hr]
+
+[center]
+[img]https://raw.githubusercontent.com/Memati8383/ReaDroid/main/docs/ekran-menu.png[/img]
+[i][size=80]Gerçek cihazda çalışan menü — Android 16 (SDK 36) / arm64-v8a[/size][/i]
+[/center]
+
+[hr]
+
+[size=110][b]Bu nedir?[/b][/size]
+
+ReaDroid, Android APK'larını [b]statik[/b] olarak inceleyen ve — düzenledikten sonra —
+tek komutla [b]yeniden derleyip, hizalayıp, imzalayarak[/b] kuruluma hazır hale getiren bir araç.
+Telefonda, [b]root olmadan[/b], bilgisayar olmadan çalışır.
+
+[b]Türkçe bir sürümü yoktu[/b] — arayüz Portekizceydi. Bu, [url=https://github.com/Mcsd7/ReaDroid]Mcsd7/ReaDroid[/url]
+(orijinal proje, MIT lisanslı, telif OffensiveTec) ile [url=https://github.com/Memati8383/ReaDroid]Memati8383/ReaDroid[/url]
+arasında, o aracın Türkçe çevirisidir.
+
+[spoiler=Bu tamamen yeni bir araç değil]
+[quote][b]Ne yapıyor:[/b] APK'nın içini inceliyor ve sonrasında geri paketliyor.
+
+[b]Yazan:[/b] Mcsd7 / OffensiveTec (MIT) — anahtar, AXML okuyucu, derleme zinciri, menü
+yapısı, testler hep orijinalden geliyor.
+
+[b]Benim yaptığım:[/b] arayüzün Türkçeleştirilmesi, tek komut kurulum, otomatik doğrulama ve
+cihazda test edip düzeltilen hatalar. Kodun tamamı orijinal — değiştirdiğim kısım
+[code]readroid/i18n.py[/code] ve [code]locales/*.json[/code].
+
+Ayrıca [b]MriBoyd[/b] upstream belgeleri İngilizceye çevirdi (PR #1); o çeviri de
+[code]README.en.md[/code] olarak korundu. Upstream Portekizce README'yi üzerine yazarak
+sildiği için [code]README.pt.md[/code] artık o orijinalin tek kopyası.
+[/quote]
+[/spoiler]
+
+[hr]
+
+[size=110][b]Türkçe sürümde ne var?[/b][/size]
+
+[b][color=#2ECC71]+[/color] Tam Türkçe arayüz.[/b] Menü, hata mesajları, rapor açıklamaları, kurulum
+betiğinin tamamı — hepsi Türkçe. İsteyen Portekizceye dönebilir:
+[code][READROID_LANG=pt python readroid.py][/code]
+
+[b][color=#2ECC71]+[/color] [e/H] soruları da çalışıyor.[/b] Orijinal betik [code][s/N][/code] diye
+soruyordu; Türkçe "evet" için [e] yazdığında "hayır" sayıyordu. Artık ikisini de kabul ediyor.
+
+[b][color=#2ECC71]+[/color] Tek komut kurulum.[/b] Aşağıdaki tek satır depoyu indiriyor,
+gereken paketleri kuruyor, kendini test ediyor ve ne yapman gerektiğini söylüyor.
+
+[b][color=#2ECC71]+[/color] Otomatik doğrulama.[/b] Kurulumdan sonra [code]python tools/selfcheck.py[/code]
+çalıştırınca ortamın, arayüzün ve analiz zincirinin sağlığını tek tek raporluyor.
+
+[b][color=#2ECC71]+[/color] Cihazda test edilmiş.[/b] Masaüstünde çalışması bir şey, telefonda
+kurulabilmesi başka. Aşağıdaki zincir uçtan uca gerçek cihazda koşuldu.
+
+[hr]
+
+[size=110][b]Kurulum[/b][/size]
+
+Termux'u açıp [b]tek satırı[/b] yapıştır:
+
+[code=bash]
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Memati8383/ReaDroid/main/install.sh)"[/code]
+
+Onaylamadan kurmak istersen:
+
+[code=bash]
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Memati8383/ReaDroid/main/install.sh)" -- -y[/code]
+
+Betik [b]idempotent[/b]: tekrar çalıştırınca yeniden kurmaz, günceller. Elle dokunduğun dosyaların
+varsa üstüne yazmaz, uyarır.
+
+[b]Elle kurarsan:[/b]
+
+[code=bash]
+pkg update && pkg upgrade
+pkg install python openjdk-21 jadx apktool aapt unzip git
+pkg install apksigner   # isteğe bağlı ama önerilir
+git clone https://github.com/Memati8383/ReaDroid.git
+cd ReaDroid
+python readroid.py[/code]
+
+[color=#F1C40F][b]Not:[/b][/color] APK'ları Download klasöründen seçebilmek için bir kez
+[code]termux-setup-storage[/code] çalıştırman gerekir.
+
+[hr]
+
+[size=110][b]Menü[/b][/size]
+
+[list]
+[*][b]1[/b] — APK yapısını incele (ZIP, SHA-256, DEX, yerel kütüphaneler)
+[*][b]2[/b] — Manifest ve izinleri analiz et
+[*][b]3[/b] — URL, alan adı ve IP ara
+[*][b]4[/b] — JADX ile Java'ya çözümle
+[*][b]5[/b] — Apktool ile smali ve kaynakları çıkar
+[*][b]6[/b] — Bağımlılıkları doğrula
+[*][b]7[/b] / [b]8[/b] — Raporlar / sonuçlar klasörlerini aç
+[*][b]9[/b] — Üretilen dosyalara göz at ve aç
+[*][b]10[/b] — Hızlı düzenlemeler ve paket adlandırma
+[*][b]11[/b] — APK'yı yeniden derle, hizala ve imzala
+[*][b]12[/b] — İmzalama anahtarını yönet
+[/list]
+
+[spoiler=Ne yapıyor / ne yapmıyor]
+[table]
+[tr][th][i]Evet[/i][/th][th][i]Hayır[/i][/th][/tr]
+[tr][td]APK yapısını inceler[/td][td]APK'yı [b]çalıştırmaz[/b][/td][/tr]
+[tr][td]İkili manifesti saf Python ile okur[/td][td]DRM / lisans doğrulama aşmaz[/td][/tr]
+[tr][td]URL, alan adı, IP tarar[/td][td]Zamanlanmış davranış izlemez[/td][/tr]
+[tr][td]Yeniden derler, hizalar, imzalar[/td][td]Orijinal APK'ya dokunmaz[/td][/tr]
+[/table]
+[/spoiler]
+
+[hr]
+
+[size=110][b]Gerçek cihazda doğrulandı[/b][/size]
+
+[code=text]
+Android 16 (SDK 36) · arm64-v8a · kernel 6.6 · Termux · Python 3.14.6
+apktool 3.0.3 · jadx 1.5.6 · aapt2 2.20 · apksigner (Termux 37.0.0)[/code]
+
+Koşulan zincir:
+[code=text]
+probe APK üretimi → 1/2/3 → 5 → 10 → 11 → 12 → apksigner verify[/code]
+
+Sonuç: yeniden derlenen APK, taşınan yeni paket adını ve izni kendi içinde korudu,
+imza [b]v2 + v3[/b] olarak doğrulandı.
+
+[spoiler=Bu test sırasında çıkan hatalar]
+Test etmenin sebebi buydu — masaüstünde yeşil olan üç şey telefonda patladı:
+
+[b][color=#E74C3C]1)[/color] [b]Varsayılan dil hiç çalışmıyordu.[/b] Kod, sistem dili Türkçe değilse
+Portekizce açıyordu. Android'de [code]LANG=en_US.UTF-8[/code] fabrika ayarı olduğu için
+Türkçe kullanıcı [code]READROID_LANG=tr[/code] yazmadan [i]Portekizce[/i] görüyordu.
+Düzeltildi: artık yabancı dil de Türkçe açıyor, Portekizce için açıkça istenmesi gerekiyor.
+
+[b][color=#E74C3C]2)[/color] [b]İmza şeması uyduruluyordu.[/b] Her imzada "v1 + v2 + v3"
+yazıyordu. Cihazdaki doğrulama [code]v1: false, v2: true, v3: true[/code] dedi — çünkü
+apksigner v1'i ancak APK'nın minSdk'sı istediğinde uyguluyor. Artık şema tahmin
+edilmiyor; [code]apksigner verify[/code] çıktısı okunuyor.
+
+[b][color=#E74C3C]3)[/color] [b]Menü kutusu dar ekranda taşıyordu.[/b] Kutu sabit 42 karakter
+boyundaydı. Artık içeriğin genişliğinden ölçülüyor, 32 kolonluk ekranda bile sığıyor.
+
+Ayrıca i18n testleri eklendi: katalog anahtar kümesi eşitliği, [code]{placeholder}[/code]
+eşleşmeleri, boş çeviri kontrolü, iki evet/hayır konvansiyonu.
+[/spoiler]
+
+[spoiler=CI ve testler]
+[code=text]
+[OK  ] Python >= 3.9 - encontrado 3.14
+[OK  ] import dos módulos - v0.3.1
+[OK  ] catálogo tr carregado - 169 chaves
+[OK  ] catálogo pt carregado - 169 chaves
+[OK  ] toda chave usada no código existe - 154 chaves
+[OK  ] banner cabe em 32 colunas - caixa de 32 colunas
+[OK  ] banner cabe em 40 colunas - caixa de 40 colunas
+[OK  ] banner cabe em 50 colunas - caixa de 47 colunas
+[OK  ] banner cabe em 72 colunas - caixa de 47 colunas
+[OK  ] inspeção de APK - sha256 49ab476fa77c...
+[OK  ] scanner de strings - 2 URL, 3 alan adı
+[OK  ] escrita de relatório JSON
+[OK  ] aapt2 responde - Android Asset Packaging Tool 2.20
+[OK  ] zipalign responde
+[OK  ] apksigner responde - 0.9
+Tudo certo. Rode: python readroid.py[/code]
+
+[code=text]
+$ python -m unittest discover -s tests
+....................................
+Ran 36 tests in 0.14s
+
+OK[/code]
+
+CI iki dili (tr/pt) ve iki Python sürümünü koşuyor:
+[url=https://github.com/Memati8383/ReaDroid/actions]github.com/Memati8383/ReaDroid/actions[/url]
+[/spoiler]
+
+[hr]
+
+[spoiler][color=#E74C3C][b]⚠ ÖNEMLİ: aapt2 bozuk gelebilir — bilinen bir tuzak[/b][/color][/spoiler]
+
+Termux'un [code]aapt2[/code] paketi, kurulu [code]libprotobuf[/code] ile uyumsuz gelirse
+[code]apktool[/code] kaynak derleyemez ve [b]11. menü seçeneği tamamen çalışmaz[/b].
+Belirti şu:
+
+[code=text]
+CANNOT LINK EXECUTABLE "aapt2": cannot locate symbol
+"_ZN6google8protobuf8internal8TcParser15MpUnknownFieldsE..."[/code]
+
+Bu ReaDroid'ın hatası [b]değil[/b] — apktool 3, kaynakları derlemek için aapt2'yi çağırıyor.
+Çözümü tek komut:
+
+[code=bash]
+pkg upgrade -y protobuf libprotobuf[/code]
+
+[code]python tools/selfcheck.py[/code] artık bunu otomatik yakalayıp o komutu söylüyor.
+
+[hr]
+
+[size=110][b]Yasal / Krediler[/b][/size]
+
+[list]
+[*]Orijinal proje ve kod: [url=https://github.com/Mcsd7/ReaDroid]Mcsd7/ReaDroid[/url] — telif OffensiveTec, lisans [b]MIT[/b]
+[*]Türkçe çeviri ve [code]tools/[/code] betikleri: [url=https://github.com/Memati8383/ReaDroid]Memati8383/ReaDroid[/url] (bu fork)
+[*]Upstream İngilizce belge çevirisi: [url=https://github.com/MriBoyd]MriBoyd[/url] (PR #1)
+[*]Dokümanlar: [code]README.md[/code] (TR) · [code]README.en.md[/code] (EN) · [code]README.pt.md[/code] (PT)
+[*]Dahili araçlar kendi lisanslarıyla ayrıdır: JADX, Apktool, apksigner, Termux
+[/list]
+
+[color=#95A5A5][size=90][i]Yeniden imzalama orijinal geliştiricinin kimliğini değiştirir ve
+mağaza sürümünün yerini almaz. Yalnızca kendi APK'larında ya da değiştirmeye yetkili
+olduğun APK'larda kullan. Başkasının değiştirilmiş APK'sını izinsiz dağıtmak lisansını
+ihlal edebilir.[/i][/size][/color]
+
+[hr]
+
+[center]
+[url=https://github.com/Memati8383/ReaDroid][b][size=110]https://github.com/Memati8383/ReaDroid[/b][/size][/url]
+[i][size=85]Tek satırla kur, hataları buraya yaz, çeviri düzeltmeleri memnuniyetle karşılanır.[/i][/size]
+[/center]
